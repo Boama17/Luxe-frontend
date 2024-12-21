@@ -5,7 +5,7 @@ export default function Hero(){
         <div className="content ml-16 ">
             <div className="text-[4em] w-[38rem] mt-[4rem] leading-[4.5rem]">
             <h1 className="font-light text-green-800 font-[Poppins]">
-               <span>Discover the</span>  
+               {/* <span>Discover the</span>   */}
                 <span className="elegant font-[Elegant] -ml-1 "> Perfect Place </span>to live 
                 <div className="flex">
                 and Thrive
