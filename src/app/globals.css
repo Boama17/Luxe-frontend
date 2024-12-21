@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Elegant';
+  src: url('../assets/fonts/Ethereal/EtherealDemo-SemiBold.otf') format('opentype');
+  font-weight: semi-bold;
+  font-style: serif;
+}
+
+@font-face{
+  font-family: 'Poppins';
+  src: url('../assets/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: semibold;
+  font-style: sans-serif;
+}
+
+@font-face{
+  font-family: 'Poppins-regular';
+  src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype'); 
+  font-weight: regular;
+  font-style: sans-serif;
+}
+
+@font-face{
+  font-family: 'Poppins-SemiBold';
+  src: url('../assets/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype'); 
+  font-weight: semi-bold;
+  font-style: sans-serif;
+}
+
+
+:root {
+  --background: #e7e5d9;
+  --foreground: #181818;
+  --purple: #a692d0;
+  --light: rgb(220, 210, 144);
+  --font-family: sans serif, 'Elegant';
+}
+
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: (--font-family);
+}
+
+.container{
+  background: url('../assets/img/hero.png');
+  background-size: cover;
+}
+
+.enter{
+  background: url('../assets/img/near.png');
+  background-size: cover;
+}
+
+.house_1{
+  background: url('../assets/img/one.jpg');
+  background-size: cover;
+}
+
+.house_2{
+  background: url('../assets/img/two.png');
+  background-size: cover;
+}
+.house_3{
+  background: url('../assets/img/three.jpg');
+  background-size: cover;
+}
+
+.contact{
+  background: url('../assets/img/contact.jpg');
+  background-size: cover;
+  
+}
