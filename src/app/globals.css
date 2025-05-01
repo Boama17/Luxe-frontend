@@ -36,7 +36,7 @@
   --foreground: #181818;
   --purple: #a692d0;
   --light: rgb(220, 210, 144);
-  --font-family: sans serif, 'Elegant';
+  --font-family: sans-serif, 'Elegant';
 }
 
 
@@ -44,34 +44,4 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: (--font-family);
-}
-
-.container{
-  background: url('../assets/img/hero.png');
-  background-size: cover;
-}
-
-.enter{
-  background: url('../assets/img/near.png');
-  background-size: cover;
-}
-
-.house_1{
-  background: url('../assets/img/one.jpg');
-  background-size: cover;
-}
-
-.house_2{
-  background: url('../assets/img/two.png');
-  background-size: cover;
-}
-.house_3{
-  background: url('../assets/img/three.jpg');
-  background-size: cover;
-}
-
-.contact{
-  background: url('../assets/img/contact.jpg');
-  background-size: cover;
-  
 }

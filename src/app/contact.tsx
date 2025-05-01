@@ -1,7 +1,10 @@
-export default function Contact(){
-    return(
-        <div className="contact h-screen text-white">
- <div className="title flex pt-44 ml-20">
+'use client';
+
+export default function Contact() {
+  return (
+    <div className="contact bg-[url('../assets/img/contact.jpg')] bg-cover min-h-screen text-white relative px-4 sm:px-6 lg:px-20">
+    
+      <div className="title ml-4 sm:ml-8 lg:ml-16 flex pt-20 sm:pt-32 md:pt-44">
         <svg 
         version="1.0" xmlns="http://www.w3.org/2000/svg"
   className='size-14 mr-[-2rem]'viewBox="0 0 300.000000 300.000000"
@@ -80,24 +83,42 @@ l6 -85 -21 25 c-23 28 -85 184 -100 251 -5 24 -12 92 -14 152 -6 141 10 144
 </g>
         </svg>
 
-        <span className="font-[Poppins-Regular] mt-5 ml-8 text-sm">
-            (Contact Us)
+        <span className="font-[Poppins-Regular] mt-5 ml-8 sm:ml-8 text-xs sm:text-sm">
+          (Contact Us)
         </span>
-         </div>
-            <div className="hero ml-20 text-5xl"><span className="font-[Poppins-SemiBold]">Ready to Find Your</span><p className="font-[Elegant]"><b>Dream Home</b>?</p></div>
-           
-            <div className="buttons flex ml-20">
-        <div className="list w-max px-10 mt-8 -ml-2 py-3 bg-white text-sm text-black rounded-3xl  cursor-pointer">
-            View Listings
-        </div>
-    <div className="circle px-5 py-5 rounded-full bg-white size-12 mt-8 ml-3  cursor-pointer">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" className="size-6 -ml-2 -mt-2">
-  <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-</svg>
+      </div>
 
-    </div>
+      {/* Hero text section */}
+      <div className="hero ml-4 sm:ml-8 lg:ml-20 mt-6 sm:mt-8">
+        <div className="text-3xl sm:text-4xl md:text-5xl">
+          <span className="font-[Poppins-SemiBold]">Ready to Find Your</span>
+          <p className="font-[Elegant]"><b>Dream Home</b>?</p>
         </div>
+      </div>
            
+      {/* Buttons section */}
+      <div className="buttons flex ml-4 sm:ml-8 lg:ml-20 mt-8">
+        {/* Contact Us button */}
+        <div className="font-[Poppins-Regular] md:pt-4 list px-6 sm:px-10 py-3 bg-white text-xs md:text-sm sm:text-sm text-black rounded-3xl cursor-pointer hover:bg-opacity-90 transition-colors">
+          Contact Us
         </div>
-    )
+
+        {/* Arrow button */}
+        <div className="circle ml-2 rounded-full bg-white size-10 sm:size-12 cursor-pointer hover:bg-opacity-90 transition-colors flex items-center justify-center">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="black" 
+            className="size-5 sm:size-5 md:size-5"
+          >
+            <path 
+              fillRule="evenodd" 
+              d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" 
+              clipRule="evenodd" 
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
 }
