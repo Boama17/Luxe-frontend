@@ -22,9 +22,9 @@ export default function Nav() {
   }, []);
 
   return (
-    <nav className="w-full px-4 lg:px-14 py-6 lg:py-10 font-[Poppins-regular]">
+    <nav className="w-full px-4 lg:px-14 py-6 lg:py-10 font-[Poppins]">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
-        <span className="font-bold text-base lg:text-lg text-emerald-900">
+        <span className="font-bold text-base lg:text-lg">
           LuxeRealty
         </span>
         

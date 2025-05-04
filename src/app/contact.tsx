@@ -7,7 +7,7 @@ export default function Contact() {
       <div className="title ml-4 sm:ml-8 lg:ml-16 flex pt-20 sm:pt-32 md:pt-44">
         <svg 
         version="1.0" xmlns="http://www.w3.org/2000/svg"
-  className='size-14 mr-[-2rem]'viewBox="0 0 300.000000 300.000000"
+  className='size-14 animate-spin-slow  mr-[-2rem]'viewBox="0 0 300.000000 300.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"

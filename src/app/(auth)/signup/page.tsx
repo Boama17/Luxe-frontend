@@ -427,7 +427,7 @@ export default function SignupPage() {
 
                   <fieldset className="space-y-3">
                     <legend className="text-sm font-medium text-gray-700">
-                      I'm interested in
+                      I&apos;m interested in
                     </legend>
                     <div className="grid grid-cols-2 gap-3">
                       {propertyTypes.map((type) => (
