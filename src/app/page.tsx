@@ -4,11 +4,12 @@ import Hero from "./hero";
 import About from "./about";
 import Property from "./properties";
 import Contact from "./contact";
+import Footer from "./footer";
 
 export default function Home() {
   return (
     <>
-      <main className="flex flex-col lg:flex-row">
+      <main className="flex flex-col  lg:flex-row">
         <div className="hero-container w-full lg:w-3/5 min-h-[110vh]">
           <Nav />
           <Hero />
@@ -20,6 +21,7 @@ export default function Home() {
       <About />
        <Property />    
      <Contact />
+     <Footer background="bg-[var(--background)]"/>
     </>
   );
 }
