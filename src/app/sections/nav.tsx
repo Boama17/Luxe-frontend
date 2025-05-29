@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import Ham from "./items";
 import Image from "next/image";
 import Link from "next/link";
-import phone from '../assets/img/phone.svg';
+import phone from '../../assets/img/phone.svg';
 
 export default function Nav() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -38,7 +38,7 @@ export default function Nav() {
               className="w-4 h-4"
             />
             <div className="font-semibold text-sm lg:text-base cursor-pointer text-gray-700 hover:text-emerald-800 transition-colors">
-              054 359 8039
+              0541537940
             </div>
           </div>
           

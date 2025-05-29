@@ -4,7 +4,7 @@ import Image from "next/image";
 import one from "../../../assets/img/one.jpg";
 import two from "../../../assets/img/two.png";
 import three from "../../../assets/img/three.jpg";
-import Footer from "@/app/footer";
+import Footer from "@/app/sections/footer";
 
 type FormData = {
   firstName: string;

@@ -39,33 +39,6 @@
 
 
 
-  .house_1{
-    background: url('../assets/img/one.jpg');
-    background-size: cover;
-  }
-  
-  .house_2{
-    background: url('../assets/img/two.png');
-    background-size: cover;
-  }
-  .house_3{
-    background: url('../assets/img/three.jpg');
-    background-size: cover;
-  }
-
-  .house_4{
-    background: url('../assets/img/one.jpg');
-    background-size: cover;
-  }
-  
-  .house_5{
-    background: url('../assets/img/two.png');
-    background-size: cover;
-  }
-  .house_6{
-    background: url('../assets/img/three.jpg');
-    background-size: cover;
-  }
 
 .swiper-button-prev::after{
     color: green;

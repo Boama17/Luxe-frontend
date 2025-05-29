@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import one from '../assets/img/near.png';
-import two from '../assets/img/second.png';
-import three from '../assets/img/three.jpg';
-import Flora from './flora';
+import one from '../../assets/img/near.png';
+import two from '../../assets/img/second.png';
+import three from '../../assets/img/three.jpg';
+import Flora from '@/components/ui/flora';
 
 
 export default function Hero() {

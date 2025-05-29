@@ -1,10 +1,10 @@
 "use client";
-import green from "../assets/img/green.png";
-import purple from "../assets/img/purple.png";
-import amber from "../assets/img/amber.png";
+import green from "../../assets/img/green.png";
+import purple from "../../assets/img/purple.png";
+import amber from "../../assets/img/amber.png";
 import React from "react";
 import Image from "next/image";
-import Flora from "./flora";
+import Flora from "@/components/ui/flora";
 
 export default function About() {
   return (

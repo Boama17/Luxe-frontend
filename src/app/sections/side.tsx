@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import profile from '../assets/img/profle.jpg';
-import heroBg from '../assets/img/hero.png';
-import nearImg from '../assets/img/near.png';
+import profile from '../../assets/img/profle.jpg';
+import heroBg from '../../assets/img/hero.png';
+import nearImg from '../../assets/img/near.png';
 
 export default function Side() {
     return (

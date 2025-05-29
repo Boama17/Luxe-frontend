@@ -1,10 +1,10 @@
-import Nav from "./nav";
-import Side from "./side";
-import Hero from "./hero";
-import About from "./about";
-import Property from "./properties";
-import Contact from "./contact";
-import Footer from "./footer";
+import Nav from "./sections/nav";
+import Side from "./sections/side";
+import Hero from "./sections/hero";
+import About from "./sections/about";
+import Property from "./sections/properties";
+import Contact from "./sections/contact";
+import Footer from "./sections/footer";
 
 export default function Home() {
   return (
