@@ -2,14 +2,18 @@
 import React, { useState } from 'react';
 import { Play, Heart, Share2, MapPin, Bath, Bed, Square, Star, Phone, Mail } from 'lucide-react';
 import Image from 'next/image';
+import one from '../../../public/house8.jpg';
+import two from '../../../public/house10.jpg';
+import three from '../../../public/house4.jpg';
 export default function Side() {
   const [isLiked, setIsLiked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   const propertyImages = [
-    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop'
+    one.src,
+    two.src,
+    three.src,
+    
   ];
 
   return (
@@ -137,10 +141,10 @@ export default function Side() {
         <div className="flex items-center justify-between bg-gradient-to-r from-emerald-50 to-indigo-50 rounded-2xl p-3">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-              JD
+              CA
             </div>
             <div>
-              <div className="font-semibold text-gray-900 text-sm">Jane Doe</div>
+              <div className="font-semibold text-gray-900 text-sm">Caleb Asiedu</div>
               <div className="flex items-center gap-1 text-xs text-gray-600">
                 <Star size={12} className="text-yellow-500 fill-current" />
                 <span>4.9 • Real Estate Expert</span>
