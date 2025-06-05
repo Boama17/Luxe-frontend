@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Nav from "./sections/nav";
 import Side from "./sections/side";
 import Hero from "./sections/hero";
@@ -5,6 +6,7 @@ import About from "./sections/about";
 import Property from "./sections/properties";
 import Contact from "./sections/contact";
 import Footer from "./sections/footer";
+import SearchResults from "./search/searchResults";
 
 export default function Home() {
   return (
@@ -14,14 +16,17 @@ export default function Home() {
           <Nav />
           <Hero />
         </div>
-        <div className="side-container lg:w-2/5 min-h-screen">
+        <div className="side-container pt-10 lg:w-2/5 min-h-screen">
           <Side />
         </div>
       </main>
-      <About />
-       <Property />    
-     <Contact />
-     <Footer background="bg-[var(--background)]"/>
+      <Suspense fallback={<div>Loading search results...</div>}>
+        <SearchResults />
+      </Suspense>
+      <Property />  
+      <About />  
+      <Contact />
+      <Footer background="bg-[var(--background)]"/>
     </>
   );
 }

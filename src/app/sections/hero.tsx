@@ -29,7 +29,7 @@ export default function Hero() {
                     View Listings
                 </div>
                 <div className="circle p-3 sm:p-4 md:p-5 rounded-full bg-black group-hover:bg-white transition-all duration-500 delay-700 size-10 sm:size-10 md:size-12 mt-2 md:mt-8 ml-2 md:ml-3 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-6 sm:size-5 md:size-6 -ml-1 sm:-ml-1.5 md:-ml-2 -mt-1 sm:-mt-1.5 md:-mt-2 group-hover:fill-black transition-all duration-700 delay-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-6 group-hover:rotate-90 sm:size-5 md:size-6 -ml-1 sm:-ml-1.5 md:-ml-2 -mt-1 sm:-mt-1.5 md:-mt-2 group-hover:fill-black transition-all duration-700 delay-700">
                         <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                     </svg>
                 </div>

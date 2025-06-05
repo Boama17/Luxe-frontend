@@ -1,92 +1,86 @@
-// services/propertyService.ts
+import { Property as LibProperty, fetchProperties } from "@/lib/properties";
 
-import { StaticImageData } from 'next/image';
+export type Property = LibProperty;
 
-export interface Property {
-    id: number;
-    title: string;
-    price: number;
-    address: string;
-    bedrooms: number;
-    bathrooms: number;
-    area: number;
-    propertyType: string;
-    yearBuilt: number;
-    description: string;
-    features: string[];
-    location: {
-      lat: number;
-      lng: number;
-    };
-    images: (string | StaticImageData);
+export interface PropertySearchParams {
+  search?: string;
+  propertyType?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minBedrooms?: number;
+  minBathrooms?: number;
+  page?: number;
+  limit?: number;
+  sort?: "price-asc" | "price-desc" | "newest" | "oldest";
+}
+
+export interface PropertySearchResult {
+  properties: Property[];
+  count: number;
+  totalPages: number;
+}
+
+export async function searchProperties(params: PropertySearchParams): Promise<PropertySearchResult> {
+  const allProperties = await fetchProperties();
+
+  // Filtering
+  let filtered = allProperties.filter((p) => {
+    const matchesSearch =
+      !params.search ||
+      p.title.toLowerCase().includes(params.search.toLowerCase()) ||
+      p.location.toLowerCase().includes(params.search.toLowerCase()) ||
+      p.city.toLowerCase().includes(params.search.toLowerCase()) ||
+      p.region.toLowerCase().includes(params.search.toLowerCase()) ||
+      p.description.toLowerCase().includes(params.search.toLowerCase());
+
+    const matchesType = !params.propertyType || p.propertyType.toLowerCase() === params.propertyType.toLowerCase();
+    const matchesMinPrice = !params.minPrice || p.price >= params.minPrice;
+    const matchesMaxPrice = !params.maxPrice || p.price <= params.maxPrice;
+    const matchesMinBedrooms = !params.minBedrooms || p.bedrooms >= params.minBedrooms;
+    const matchesMinBathrooms = !params.minBathrooms || p.bathrooms >= params.minBathrooms;
+
+    return (
+      matchesSearch &&
+      matchesType &&
+      matchesMinPrice &&
+      matchesMaxPrice &&
+      matchesMinBedrooms &&
+      matchesMinBathrooms
+    );
+  });
+
+  // Sorting
+  if (params.sort) {
+    filtered = filtered.slice().sort((a, b) => {
+      switch (params.sort) {
+        case "price-asc":
+          return a.price - b.price;
+        case "price-desc":
+          return b.price - a.price;
+        case "oldest":
+          return a.id - b.id;
+        case "newest":
+        default:
+          return b.id - a.id;
+      }
+    });
   }
-  
-  export interface PropertySearchParams {
-    search?: string;
-    propertyType?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    minBedrooms?: number;
-    minBathrooms?: number;
-    page?: number;
-    limit?: number;
-  }
-  
-  export interface PropertySearchResult {
-    count(count: any): import("react").SetStateAction<number>;
-    properties: Property[];
-    totalProperties: number;
-    currentPage: number;
-    totalPages: number;
-  }
-  
-  export interface PropertyResponse {
-    id: number;
-    title: string;
-    price: number;
-    address: string;
-    bedrooms: number;
-    bathrooms: number;
-    area: number;
-    propertyType: string;
-    yearBuilt: number;
-    description: string;
-    features: string[];
-    location: {
-      lat: number;
-      lng: number;
-    };
-    images: string[];
-  }
-  
-  export async function searchProperties(params: PropertySearchParams): Promise<PropertySearchResult> {
-    // Convert params to query string
-    const queryParams = new URLSearchParams();
-    
-    if (params.search) queryParams.append('search', params.search);
-    if (params.propertyType) queryParams.append('propertyType', params.propertyType);
-    if (params.minPrice) queryParams.append('minPrice', params.minPrice.toString());
-    if (params.maxPrice) queryParams.append('maxPrice', params.maxPrice.toString());
-    if (params.minBedrooms) queryParams.append('minBedrooms', params.minBedrooms.toString());
-    if (params.minBathrooms) queryParams.append('minBathrooms', params.minBathrooms.toString());
-    if (params.page) queryParams.append('page', params.page.toString());
-    if (params.limit) queryParams.append('limit', params.limit.toString());
-  
-    const response = await fetch(`/api/properties?${queryParams.toString()}`);
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch properties');
-    }
-  
-    return response.json();
-  }
-  
-  export async function getPropertyById(id: number): Promise<PropertyResponse> {
-    const response = await fetch(`/api/properties/${id}`);
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch property details');
-    }
-  
-    return response.json();
-  }
+
+  // Pagination
+  const page = params.page ?? 1;
+  const limit = params.limit ?? 6;
+  const start = (page - 1) * limit;
+  const end = start + limit;
+  const paginated = filtered.slice(start, end);
+
+  return {
+    properties: paginated,
+    count: filtered.length,
+    totalPages: Math.max(1, Math.ceil(filtered.length / limit)),
+  };
+}
+
+export async function getPropertyById(id: number): Promise<Property | undefined> {
+  const allProperties = await fetchProperties();
+  return allProperties.find((p) => p.id === id);
+}

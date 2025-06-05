@@ -1,89 +1,172 @@
+"use client";
+import React, { useState } from 'react';
+import { Play, Heart, Share2, MapPin, Bath, Bed, Square, Star, Phone, Mail } from 'lucide-react';
 import Image from 'next/image';
-import profile from '../../assets/img/profle.jpg';
-import heroBg from '../../assets/img/hero.png';
-import nearImg from '../../assets/img/near.png';
-
 export default function Side() {
-    return (
-        <div className="container md:mt-7 -mt-5 ms-auto me-auto font-[Poppins-regular] md:h-[40rem] h-[40rem] md:w-[30rem] w-[25rem] rounded-3xl relative overflow-hidden">
-            {/* Background image using Next.js Image component */}
-            <div className="absolute inset-0 z-0">
-                <Image
-                    src={heroBg}
-                    alt="Background"
-                    layout="fill"
-                    objectFit="cover"
-                    quality={100}
-                    className="rounded-3xl"
-                />
-            </div>
-            
-            <div className="content pt-0.5 relative z-10">
-                <div className="discount flex flex-col rounded-2xl w-[8rem] md:ml-[4.3rem] ms-8 mt-[4rem] shadow-2xl h-28 bg-[#ffffffd0]">
-                    <span className="text-[0.6rem] ml-2 mt-2 tracking-wide">
-                        Get discount up to
-                    </span>
-                    <span className="text-3xl ml-2 mt-1 font-[Poppins-SemiBold]">
-                        50%
-                    </span>
-                    <div className="mt-5 w-[7.2rem] border-gray-300 border-[2px] ml-[0.375rem] bg-[#ffffff14] rounded-2xl border-solid">
-                        <div className="now -mt-1"><span className="text-[0.6rem] ml-6">Contact Now</span></div>
-                    </div>
-                </div>
-                
-                <div className="tour flex flex-col rounded-2xl w-[10rem] md:w-[12rem] ms-[14rem] md:ms-[16rem] mt-8 shadow-2xl h-24 bg-[#ffffffd0]">
-                    <div className="head flex ml-3 mt-3">
-                        <div className="green w-4 h-4 bg-green-800 rounded-full"></div>
-                        <span className="text-xs ml-3">House tour</span>
-                    </div>
-                    <div className="relative rounded-xl w-[8rem] md:w-[11.08rem] ms-auto me-auto mt-2 shadow-2xl h-[3.3rem] overflow-hidden">
-                        <Image
-                            src={nearImg}
-                            alt="House tour"
-                            layout="fill"
-                            objectFit="cover"
-                            className="rounded-xl"
-                        />
-                        <div className="absolute inset-0 flex justify-center items-center">
-                            <div className="play flex rounded-3xl w-20 h-8 bg-white"> 
-                                <span className="font-bold text-sm ml-3 place-content-center">Play</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5 mt-1 ml-1">
-                                    <path d="M5.055 7.06C3.805 6.347 2.25 7.25 2.25 8.69v8.122c0 1.44 1.555 2.343 2.805 1.628L12 14.471v2.34c0 1.44 1.555 2.343 2.805 1.628l7.108-4.061c1.26-.72 1.26-2.536 0-3.256l-7.108-4.061C13.555 6.346 12 7.249 12 8.689v2.34L5.055 7.061Z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div className="profile flex flex-col rounded-2xl w-[10rem] md:ml-[3rem] ms-[2rem] mt-8 shadow-2xl h-[6.6rem] bg-[#ffffffd0]">
-                    <div className="profile pt-3">
-                        <Image
-                            src={profile}
-                            alt="Developer profile"
-                            width={32}
-                            height={32}
-                            className="h-8 w-8 ml-3 rounded-full"
-                        />
-                    </div> 
-                    <div className="capt mt-3">
-                        <p className='text-[0.4rem] ms-2 leading-[0.8rem] justify-center'>
-                            Developed by expert architects with years of experience and a passion for creating exceptional living spaces.
-                        </p>
-                    </div>
-                </div>
-                
-                <div className="price flex flex-col rounded-2xl w-[8rem] md:ms-[18.5rem] ms-auto me-8 shadow-2xl h-28 bg-[#ffffffd0] shadow-3xl">
-                    <span className="text-[0.6rem] ms-2 mt-2 tracking-wide">
-                        Green House
-                    </span>
-                    <span className="text-xl ms-2 mt-1 font-semibold font-[Ethereal]">
-                        ＄<span className='-ms-1'> 450,000</span>
-                    </span>
-                    <p className='text-[0.45rem] text-gray-500 ms-2 mt-5'>
-                        Minimalist modern house for family
-                    </p>
-                </div>
-            </div>
+  const [isLiked, setIsLiked] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const propertyImages = [
+    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop'
+  ];
+
+  return (
+    <div className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden font-sans h-[90vh] flex flex-col">
+      {/* Header with navigation dots */}
+      <div className="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden flex-shrink-0">
+      <Image 
+          src={propertyImages[currentImageIndex]}
+          alt="Property" 
+          className="w-full h-full object-cover transition-all duration-500"
+          fill
+          sizes="(max-width: 768px) 100vw, 100vw"
+          priority
+          style={{ objectFit: "cover" }}
+        />
+        
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        
+        {/* Top controls */}
+        <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
+          <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium text-green-700">
+            🏡 Featured Property
+          </div>
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setIsLiked(!isLiked)}
+              className={`p-2.5 rounded-full backdrop-blur-sm transition-all ${
+                isLiked ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-700 hover:bg-white'
+              }`}
+            >
+              <Heart size={16} fill={isLiked ? 'currentColor' : 'none'} />
+            </button>
+            <button className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full text-gray-700 hover:bg-white transition-all">
+              <Share2 size={16} />
+            </button>
+          </div>
         </div>
-    );
+        
+        {/* Image navigation dots */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {propertyImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-2 h-2 rounded-full transition-all ${
+                index === currentImageIndex ? 'bg-white w-6' : 'bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+        
+        {/* Price tag */}
+        <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-2xl">
+          <div className="text-2xl font-bold text-gray-900">$450K</div>
+          <div className="text-xs text-gray-600 -mt-1">Est. monthly: $2,850</div>
+        </div>
+      </div>
+      
+      {/* Content section */}
+      <div className="p-4 space-y-3 flex-1 overflow-y-auto">
+        {/* Property title and location */}
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 mb-1">Modern Green House</h2>
+          <div className="flex items-center text-gray-600 text-sm">
+            <MapPin size={14} className="mr-1" />
+            <span>Sunset Boulevard, California</span>
+          </div>
+        </div>
+        
+        {/* Property stats */}
+        <div className="flex justify-between bg-gray-50 rounded-2xl p-3">
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <Bed size={16} className="text-gray-600" />
+            </div>
+            <div className="font-semibold text-gray-900">3</div>
+            <div className="text-xs text-gray-600">Bedrooms</div>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <Bath size={16} className="text-gray-600" />
+            </div>
+            <div className="font-semibold text-gray-900">2</div>
+            <div className="text-xs text-gray-600">Bathrooms</div>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <Square size={16} className="text-gray-600" />
+            </div>
+            <div className="font-semibold text-gray-900">2.1K</div>
+            <div className="text-xs text-gray-600">Sq ft</div>
+          </div>
+        </div>
+        
+        {/* Special offer */}
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-3">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-green-800 font-semibold text-sm mb-1">🎉 Limited Time Offer</div>
+              <div className="text-green-700 text-xs leading-relaxed">
+                Get up to <span className="font-bold">15% discount</span> on closing costs + free home inspection
+              </div>
+            </div>
+            <div className="text-2xl">🏷️</div>
+          </div>
+        </div>
+        
+        {/* Virtual tour */}
+        <div className="bg-slate-50 rounded-2xl p-3">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <div className="font-semibold text-gray-900 text-sm">Virtual House Tour</div>
+              <div className="text-xs text-gray-600">360° interactive experience</div>
+            </div>
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          </div>
+          <button className="w-full bg-white hover:bg-gray-50 transition-all rounded-xl p-2.5 flex items-center justify-center gap-2 text-sm font-medium text-gray-900 border border-gray-200">
+            <Play size={16} className="text-emerald-600" />
+            Start Virtual Tour
+          </button>
+        </div>
+        
+        {/* Agent info */}
+        <div className="flex items-center justify-between bg-gradient-to-r from-emerald-50 to-indigo-50 rounded-2xl p-3">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              JD
+            </div>
+            <div>
+              <div className="font-semibold text-gray-900 text-sm">Jane Doe</div>
+              <div className="flex items-center gap-1 text-xs text-gray-600">
+                <Star size={12} className="text-yellow-500 fill-current" />
+                <span>4.9 • Real Estate Expert</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <button className="p-2.5 bg-white hover:bg-gray-50 rounded-xl transition-all">
+              <Phone size={14} className="text-gray-600" />
+            </button>
+            <button className="p-2.5 bg-white hover:bg-gray-50 rounded-xl transition-all">
+              <Mail size={14} className="text-gray-600" />
+            </button>
+          </div>
+        </div>
+        
+        {/* Action buttons */}
+        <div className="flex gap-3 pt-1">
+          <button className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-semibold py-3 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+            Schedule Visit
+          </button>
+          <button className="px-6 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-3 rounded-2xl transition-all">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
