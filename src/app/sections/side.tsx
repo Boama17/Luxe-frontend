@@ -13,14 +13,13 @@ export default function Side() {
     one.src,
     two.src,
     three.src,
-    
   ];
 
   return (
     <div className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden font-sans h-[90vh] flex flex-col">
       {/* Header with navigation dots */}
       <div className="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden flex-shrink-0">
-      <Image 
+        <Image 
           src={propertyImages[currentImageIndex]}
           alt="Property" 
           className="w-full h-full object-cover transition-all duration-500"
@@ -68,8 +67,8 @@ export default function Side() {
         
         {/* Price tag */}
         <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-2xl">
-          <div className="text-2xl font-bold text-gray-900">$450K</div>
-          <div className="text-xs text-gray-600 -mt-1">Est. monthly: $2,850</div>
+          <div className="text-2xl font-bold text-gray-900">GH₵450K</div>
+          <div className="text-xs text-gray-600 -mt-1">Est. monthly: GH₵2,850</div>
         </div>
       </div>
       
@@ -80,7 +79,7 @@ export default function Side() {
           <h2 className="text-xl font-bold text-gray-900 mb-1">Modern Green House</h2>
           <div className="flex items-center text-gray-600 text-sm">
             <MapPin size={14} className="mr-1" />
-            <span>Sunset Boulevard, California</span>
+            <span>East Legon, Accra</span>
           </div>
         </div>
         
