@@ -1,17 +1,9 @@
 // Types for our property data
 
-import one from "../assets/img/one.jpg"
-import two from "../assets/img/three.jpg"
-import three from "../assets/img/two.png"
-import four from "../assets/img/near.png"
-import five from "../assets/img/second.png"
-import six from "../assets/img/hero.png"
-import seven from "../assets/img/one.jpg"
-import eight from "../../public/house1.jpg"
-import nine from "../assets/img/three.jpg"
-import ten from "../../public/house3.jpg"
-import eleven from "../../public/house2.jpg"
-import twelve from "../assets/img/two.png"
+import one from "../../public/house1.jpg"
+import two from "../../public/house2.jpg"
+import three from "../../public/house3.jpg"
+
 
 
 import { ReactNode } from "react"
@@ -46,7 +38,7 @@ const Properties: Property[] = [
     location: "East Legon",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: one.src,
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", // Ghana house
     description: "Beautiful modern house in prestigious East Legon with contemporary finishes",
     propertyType: "House",
     address: undefined
@@ -62,7 +54,7 @@ const Properties: Property[] = [
     location: "Airport Residential",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: two.src,
+    imageUrl: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80", // Villa exterior
     description: "Luxury villa near Kotoka International Airport with premium amenities",
     propertyType: "Villa",
     address: undefined
@@ -78,7 +70,7 @@ const Properties: Property[] = [
     location: "Tema Community 25",
     city: "Tema",
     region: "Greater Accra",
-    imageUrl: three.src,
+    imageUrl: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80", // Family home
     description: "Comfortable family home in quiet neighborhood with garden space",
     propertyType: "House",
     address: undefined
@@ -94,7 +86,7 @@ const Properties: Property[] = [
     location: "Trasacco Estate",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: four.src,
+    imageUrl: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80", // Modern house
     description: "Modern house in exclusive gated community with 24/7 security",
     propertyType: "House",
     address: undefined
@@ -110,7 +102,7 @@ const Properties: Property[] = [
     location: "Roman Ridge",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: five.src,
+    imageUrl: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=800&q=80", // Villa with pool
     description: "Large villa with swimming pool, garden, and panoramic city views",
     propertyType: "Villa",
     address: undefined
@@ -126,7 +118,7 @@ const Properties: Property[] = [
     location: "Adenta Housing Down",
     city: "Adenta",
     region: "Greater Accra",
-    imageUrl: six.src,
+    imageUrl: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80", // Cozy home
     description: "Affordable family home with modern amenities and parking space",
     propertyType: "House",
     address: undefined
@@ -142,7 +134,7 @@ const Properties: Property[] = [
     location: "Cantonments",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: seven.src,
+    imageUrl: "https://images.unsplash.com/photo-1503389152951-9c3d8b6e9c94?auto=format&fit=crop&w=800&q=80", // Townhouse
     description: "Elegant townhouse in prime Cantonments location with rooftop terrace",
     propertyType: "Townhouse",
     address: undefined
@@ -158,7 +150,7 @@ const Properties: Property[] = [
     location: "Spintex Road",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: eight.src,
+    imageUrl: one.src,
     description: "Modern home with beautiful garden views and open-plan living",
     propertyType: "Estate",
     address: undefined
@@ -174,7 +166,7 @@ const Properties: Property[] = [
     location: "Dzorwulu",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: nine.src,
+    imageUrl: "https://images.unsplash.com/photo-1519974719765-e6559eac2575?auto=format&fit=crop&w=800&q=80", // Duplex
     description: "Sophisticated duplex with study room and domestic quarters",
     propertyType: "Duplex",
     address: undefined
@@ -190,7 +182,7 @@ const Properties: Property[] = [
     location: "Nungua",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: ten.src,
+    imageUrl: three.src,
     description: "Serene home near the coast with sea breeze and tropical landscaping",
     propertyType: "House",
     address: undefined
@@ -206,7 +198,7 @@ const Properties: Property[] = [
     location: "Peduase",
     city: "Aburi",
     region: "Eastern Region",
-    imageUrl: eleven.src,
+    imageUrl: "https://images.unsplash.com/photo-1512918728675-2d3ec7ab9433?auto=format&fit=crop&w=800&q=80",
     description: "Magnificent mansion with breathtaking mountain views and wine cellar",
     propertyType: "Mansion",
     address: undefined
@@ -222,7 +214,7 @@ const Properties: Property[] = [
     location: "Osu",
     city: "Accra",
     region: "Greater Accra",
-    imageUrl: twelve.src,
+    imageUrl: two.src, 
     description: "Trendy loft apartment in vibrant Osu with high ceilings and modern fixtures",
     propertyType: "Loft",
     address: undefined
