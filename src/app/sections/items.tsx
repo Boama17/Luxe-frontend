@@ -86,7 +86,7 @@ export default function Ham() {
           {/* Contact Info */}
           <div className="mt-12 md:mt-16 text-center">
             <p className="text-white text-sm md:text-base mb-2">Get in touch</p>
-            <p className="text-white text-lg md:text-xl font-semibold">054 359 8039</p>
+            <p className="text-white text-lg md:text-xl font-semibold">054 153 7940</p>
           </div>
 
           {/* Social Links */}

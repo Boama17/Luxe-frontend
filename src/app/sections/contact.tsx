@@ -1,4 +1,5 @@
 'use client';
+import Link from "next/link";
 
 export default function Contact() {
   return (
@@ -97,7 +98,7 @@ l6 -85 -21 25 c-23 28 -85 184 -100 251 -5 24 -12 92 -14 152 -6 141 10 144
       </div>
            
       {/* Buttons section */}
-      <div className="buttons flex ml-4 sm:ml-8 lg:ml-20 mt-8">
+      <Link className="buttons flex ml-4 sm:ml-8 lg:ml-20 mt-8" href="/contact">
         {/* Contact Us button */}
         <div className="font-[Poppins-Regular] md:pt-4 list px-6 sm:px-10 py-3 bg-white text-xs md:text-sm sm:text-sm text-black rounded-3xl cursor-pointer hover:bg-opacity-90 transition-colors">
           Contact Us
@@ -118,7 +119,7 @@ l6 -85 -21 25 c-23 28 -85 184 -100 251 -5 24 -12 92 -14 152 -6 141 10 144
             />
           </svg>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }

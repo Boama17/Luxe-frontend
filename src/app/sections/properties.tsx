@@ -1,32 +1,153 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation } from "swiper/modules"
-import "swiper/css"
+import { Navigation, Autoplay, Pagination } from "swiper/modules"
 import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
+import {
+  Loader2,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  BedDouble,
+  Bath,
+  Ruler,
+  MapPin,
+  Heart,
+  Star,
+} from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+
+// Import Swiper styles
+import "swiper/css"
 import "swiper/css/navigation"
-import { fetchProperties, formatPrice, type Property } from "@/lib/properties"
-import { Loader2, ChevronDown, ChevronUp } from "lucide-react"
-import Flora from "../../components/ui/flora"
+import "swiper/css/pagination"
+
+//images
+import one from "../../../public/house1.jpg"
+import two from "../../../public/house2.jpg"
+import three from "../../../public/house3.jpg"
+import four from "../../../public/house4.jpg"
+import five from "../../../public/house5.jpg"
+import six from "../../../public/house6.jpg"
+import Flora from "@/components/ui/flora"
+
+// Mock data for demonstration
+const mockProperties = [
+  {
+    id: 1,
+    title: "Family Residence",
+    city: "Tema",
+    location: "Tema Community 25",
+    price: 320000,
+    currency: "₵",
+    bedrooms: 3,
+    bathrooms: 2,
+    area: 1200,
+    imageUrl: one.src,
+    rating: 4.8,
+    isNew: true,
+  },
+  {
+    id: 2,
+    title: "Contemporary House",
+    city: "Accra",
+    location: "Trasacco Estate",
+    price: 520000,
+    currency: "₵",
+    bedrooms: 4,
+    bathrooms: 3,
+    area: 1800,
+    imageUrl: two.src,
+    rating: 4.9,
+    isNew: false,
+  },
+  {
+    id: 3,
+    title: "Spacious Villa",
+    city: "Accra",
+    location: "Roman Ridge",
+    price: 750000,
+    currency: "₵",
+    bedrooms: 6,
+    bathrooms: 5,
+    area: 2500,
+    imageUrl: three.src,
+    rating: 5.0,
+    isNew: true,
+  },
+  {
+    id: 4,
+    title: "Modern Apartment",
+    city: "Kumasi",
+    location: "Airport Residential",
+    price: 280000,
+    currency: "₵",
+    bedrooms: 2,
+    bathrooms: 2,
+    area: 900,
+    imageUrl: four.src,
+    rating: 4.6,
+    isNew: false,
+  },
+  {
+    id: 5,
+    title: "Luxury Penthouse",
+    city: "Accra",
+    location: "East Legon",
+    price: 950000,
+    currency: "₵",
+    bedrooms: 5,
+    bathrooms: 4,
+    area: 2200,
+    imageUrl: five.src,
+    rating: 4.9,
+    isNew: true,
+  },
+  {
+    id: 6,
+    title: "Garden Estate Home",
+    city: "Takoradi",
+    location: "European Town",
+    price: 420000,
+    currency: "₵",
+    bedrooms: 4,
+    bathrooms: 3,
+    area: 1600,
+    imageUrl: six.src,
+    rating: 4.7,
+    isNew: false,
+  },
+]
+
+type Property = (typeof mockProperties)[0]
+
+const formatPrice = (price: number, currency: string) => {
+  return `${currency}${price.toLocaleString()}`
+}
 
 export default function PropertyListing() {
   const [properties, setProperties] = useState<Property[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
-  const [showAll, setShowAll] = useState(false)
-  const [isExpanding, setIsExpanding] = useState(false)
+  const [showAll, setShowAll] = useState<boolean>(false)
+  const [favorites, setFavorites] = useState<Set<string>>(new Set())
 
-  // Fetch properties when component mounts
+  // Simulate data loading
   useEffect(() => {
-    async function loadProperties() {
+    const loadProperties = async () => {
       try {
-        setLoading(true)
-        const data = await fetchProperties()
-        setProperties(data)
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        setProperties(mockProperties)
       } catch (err) {
-        setError("Failed to load properties")
-        console.error("Error fetching properties:", err)
+        setError("Failed to load properties. Please try again later.")
+        console.error("Fetch error:", err)
       } finally {
         setLoading(false)
       }
@@ -35,248 +156,305 @@ export default function PropertyListing() {
     loadProperties()
   }, [])
 
-  const handleViewMore = () => {
-    setIsExpanding(true)
-    setTimeout(() => {
-      setShowAll(!showAll)
-      setIsExpanding(false)
-    }, 300)
+  const toggleViewMore = () => {
+    setShowAll((prev) => !prev)
   }
 
-  // Show only first 6 properties initially
-  const displayedProperties = showAll ? properties : properties.slice(0, 6)
-  const additionalProperties = showAll ? properties.slice(6) : []
+  const toggleFavorite = (propertyId: string) => {
+    setFavorites((prev) => {
+      const newFavorites = new Set(prev)
+      if (newFavorites.has(propertyId)) {
+        newFavorites.delete(propertyId)
+      } else {
+        newFavorites.add(propertyId)
+      }
+      return newFavorites
+    })
+  }
 
-  const BedIcon = () => (
-    <svg
-      version="1.0"
-      xmlns="http://www.w3.org/2000/svg"
-      width="200.000000pt"
-      height="200.000000pt"
-      viewBox="0 0 200.000000 200.000000"
-      className="size-10 mt-2 ml-2"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <g transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
-        <path d="M763 1480 c-35 -14 -43 -42 -43 -148 l0 -99 -38 -7 c-85 -13 -152 -94 -152 -184 0 -36 3 -43 18 -40 12 2 18 16 22 53 7 61 30 98 75 119 29 14 93 16 480 16 495 0 495 0 535 -65 15 -24 20 -50 20 -101 l0 -69 -552 3 c-304 1 -563 0 -576 -3 -22 -5 -23 -9 -20 -98 2 -74 6 -92 18 -92 12 0 16 17 18 78 l3 77 554 0 554 0 3 -77 c2 -61 6 -78 18 -78 13 0 16 25 18 150 3 159 -4 204 -40 250 -41 53 -87 65 -250 65 l-148 0 0 34 c0 19 -9 44 -19 57 -18 23 -25 24 -136 24 -111 0 -118 -1 -136 -24 -10 -13 -19 -38 -19 -57 l0 -34 -105 0 -105 0 0 104 c0 85 3 105 16 110 23 9 687 7 701 -2 7 -5 13 -39 15 -87 2 -63 6 -80 18 -80 12 0 16 17 18 81 2 68 0 85 -17 105 l-19 24 -354 2 c-194 1 -363 -2 -375 -7z m465 -182 c7 -7 12 -25 12 -40 l0 -28 -115 0 -115 0 0 28 c0 45 16 52 115 52 57 0 95 -4 103 -12z" />
-      </g>
-    </svg>
-  )
-
-  const BathIcon = () => (
-    <svg
-      version="1.0"
-      xmlns="http://www.w3.org/2000/svg"
-      width="1320.000000pt"
-      height="880.000000pt"
-      viewBox="0 0 1320.000000 880.000000"
-      className="size-10 mt-[0.7rem]"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <g transform="translate(0.000000,880.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
-        <path d="M7950 7331 c-343 -73 -636 -309 -923 -743 -50 -76 -94 -138 -98 -138 -3 0 -71 29 -150 64 -79 35 -176 77 -215 94 l-71 30 -76 -172 c-43 -94 -77 -176 -77 -182 0 -12 2 -13 630 -299 250 -114 493 -224 539 -246 46 -21 89 -39 96 -39 11 0 69 111 150 285 l33 71 -234 109 c-129 59 -234 112 -234 117 0 15 127 203 190 282 84 104 219 229 300 277 182 108 397 132 603 69 177 -55 308 -205 366 -421 55 -202 54 -175 58 -1161 l4 -918 -2323 -2 -2323 -3 -52 -24 c-130 -59 -205 -207 -174 -349 21 -99 305 -712 439 -947 155 -273 329 -467 509 -570 l53 -31 -210 -209 c-116 -115 -210 -213 -210 -217 0 -5 113 -8 251 -8 l251 0 147 142 148 141 1114 -2 c1117 -2 1271 2 1459 34 134 23 121 40 119 -147 l-1 -163 204 0 203 0 2 238 2 239 72 44 c288 178 495 442 613 783 41 117 80 297 95 443 15 132 15 2308 1 2449 -54 531 -274 891 -629 1028 -183 71 -459 92 -651 52z m890 -3358 c-1 -60 -21 -219 -40 -308 -53 -254 -155 -450 -314 -602 -172 -166 -384 -261 -686 -310 -92 -14 -232 -17 -1125 -20 -1065 -5 -1203 -1 -1350 37 -117 30 -179 64 -265 146 -144 138 -254 313 -476 758 -85 170 -154 313 -154 317 0 5 986 9 2205 9 l2205 0 0 -27z" />
-      </g>
-    </svg>
-  )
-
-  const AreaIcon = () => (
-    <svg
-      version="1.0"
-      xmlns="http://www.w3.org/2000/svg"
-      width="200.000000pt"
-      height="200.000000pt"
-      viewBox="0 0 200.000000 200.000000"
-      className="size-7 mt-2 ml-2"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <g transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
-        <path d="M415 1585 l-25 -24 0 -561 0 -561 25 -24 24 -25 561 0 561 0 24 25 c25 24 25 27 25 189 0 181 -7 214 -49 222 -14 3 -183 6 -376 7 l-350 2 -2 350 c-1 193 -4 362 -7 376 -8 42 -41 49 -222 49 -162 0 -165 0 -189 -25z m345 -407 l0 -363 -142 -142 c-79 -79 -146 -143 -151 -143 -4 0 -6 71 -5 158 l3 157 55 3 c59 3 80 14 80 43 0 20 -19 27 -90 31 l-45 3 0 75 0 75 45 3 c71 4 90 11 90 31 0 29 -21 40 -80 43 l-55 3 0 75 0 75 59 5 c66 6 90 26 67 54 -10 11 -31 16 -72 16 l-59 0 0 73 c0 41 3 77 7 80 3 4 71 7 150 7 l143 0 0 -362z m778 -565 l-3 -148 -75 0 -75 0 -3 55 c-3 59 -14 80 -43 80 -20 0 -27 -19 -31 -90 l-3 -45 -77 -3 -78 -3 0 59 c0 42 -5 63 -16 73 -28 23 -48 -1 -54 -67 l-5 -59 -75 0 -75 0 -3 62 c-2 52 -6 63 -23 68 -34 11 -49 -12 -49 -76 l0 -59 -160 0 c-88 0 -160 3 -160 7 0 4 64 72 142 150 l143 143 363 0 363 0 -3 -147z" />
-      </g>
-    </svg>
-  )
-
-  // Property Card Component for reusability
-  const PropertyCard = ({ property }: { property: Property }) => (
-    <div className="sale w-full">
-    <div className="relative">
-      <Image
-        src={property.imageUrl}
-        alt={property.title}
-        className="w-full h-[18rem] sm:h-[18rem] md:h-[18rem] lg:h-[18rem] rounded-2xl mx-auto object-cover"
-        width={600} // Adjust width as appropriate for your layout
-        height={288} // Adjust height as appropriate for your layout
-        priority={true}
-        sizes="(max-width: 1024px) 100vw, 33vw"
-      />
-
-        <div className="flex h-12 w-full max-w-[22rem] mx-auto rounded-3xl -mt-16 bg-white/90 backdrop-blur-sm relative shadow-lg">
-          <div className="flex items-center justify-between -mt-3 -ms-2 w-full">
-            <div className="flex items-center">
-              <BedIcon />
-              <span className="text-xs font-[Poppins-Regular] mt-4 ml-2 mr-1 flex w-max text-gray-800">
-                {property.bedrooms} Bedroom{property.bedrooms !== 1 ? "s" : ""}
-              </span>
-            </div>
-
-            <div className="flex items-center">
-              <BathIcon />
-              <span className="text-xs font-[Poppins-Regular] mt-4 mr-1 flex w-max text-gray-800">
-                {property.bathrooms} Bathroom{property.bathrooms !== 1 ? "s" : ""}
-              </span>
-            </div>
-
-            <div className="flex items-center">
-              <AreaIcon />
-              <span className="text-xs font-[Poppins-Regular] mt-4 mr-1 flex w-max text-gray-800">
-                {property.area.toLocaleString()} ft²
-              </span>
-            </div>
-          </div>
-        </div>
+  // Property feature component with improved styling
+  const PropertyFeature = ({
+    icon: Icon,
+    value,
+    label,
+  }: {
+    icon: React.ComponentType<{ className?: string }>
+    value: number
+    label: string
+  }) => (
+    <div className="flex items-center gap-2 text-gray-700">
+      <div className="flex-shrink-0 w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+        <Icon className="w-4 h-4 text-green-600" />
       </div>
-
-      <div className="descr">
-        <div className="head font-[Poppins] mt-10 text-2xl flex justify-between px-10">
-          <span className="text-gray-900">{property.title}</span>
-          <span className="text-green-700 font-bold">
-            {formatPrice(property.price, property.currency)}
-          </span>
-        </div>
-        <div className="small text-sm font-[Poppins-Regular] mt-8 mx-10 mb-6 text-gray-600">
-          {property.location}, {property.city}, {property.region}
-        </div>
+      <div className="flex flex-col">
+        <span className="text-sm font-semibold text-gray-900">{value}</span>
+        <span className="text-xs text-gray-500">{label}</span>
       </div>
     </div>
   )
 
-  if (loading) {
-    return (
-      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="hero flex pt-24 ml-20">
-          <div className="flex items-center gap-2">
-            <Flora />
-            <span className="font-[Poppins-Regular] mt-5 ml-8 text-sm text-gray-700">(Featured Properties)</span>
+  // Enhanced property card component
+  const PropertyCard = ({
+    property,
+    index = 0,
+  }: {
+    property: Property
+    index?: number
+  }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="h-full"
+    >
+      <Card className="group relative overflow-hidden h-full bg-white shadow-sm hover:shadow-xl transition-all duration-300 border-0 rounded-2xl">
+        {/* Image container with improved aspect ratio */}
+        <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl">
+          <Image
+            src={property.imageUrl || "/placeholder.svg"}
+            alt={`${property.title} in ${property.location}`}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={index < 3}
+          />
+
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+
+          {/* Top badges and buttons */}
+          <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
+            {/* New badge */}
+            {property.isNew && (
+              <Badge className="bg-green-500 hover:bg-green-600 text-white border-0 px-3 py-1 text-xs font-medium">
+                New
+              </Badge>
+            )}
+
+            {/* Favorite button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation()
+                toggleFavorite(String(property.id))
+              }}
+              className="ml-auto w-9 h-9 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full shadow-sm border-0"
+            >
+              <Heart
+                className={`w-4 h-4 transition-colors ${
+                  favorites.has(String(property.id)) ? "text-red-500 fill-red-500" : "text-gray-600 hover:text-red-500"
+                }`}
+              />
+            </Button>
+          </div>
+
+          {/* Price badge */}
+          <div className="absolute top-4 right-4">
+            <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm">
+              <span className="font-bold text-green-600 text-lg">{formatPrice(property.price, property.currency)}</span>
+            </div>
+          </div>
+
+          {/* Location badge */}
+          <div className="absolute bottom-4 left-4">
+            <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-lg">
+              <MapPin className="w-3.5 h-3.5 text-white" />
+              <span className="text-white text-sm font-medium">{property.location}</span>
+            </div>
           </div>
         </div>
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-          <span className="ml-2 text-gray-600">Loading properties...</span>
+
+        {/* Card content with better spacing */}
+        <CardContent className="p-6 flex flex-col h-full">
+          {/* Title and rating */}
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1 group-hover:text-green-600 transition-colors">
+                {property.title}
+              </h3>
+              <p className="text-gray-600 text-sm font-medium">{property.city}</p>
+            </div>
+            <div className="flex items-center gap-1 ml-3">
+              <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+              <span className="text-sm font-semibold text-gray-700">{property.rating}</span>
+            </div>
+          </div>
+
+          {/* Property features with improved layout */}
+          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+            <PropertyFeature icon={BedDouble} value={property.bedrooms} label="Beds" />
+            <PropertyFeature icon={Bath} value={property.bathrooms} label="Baths" />
+            <PropertyFeature icon={Ruler} value={property.area} label="Sq Ft" />
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  )
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="max-w-7xl mx-auto px-6 py-16">
+        <Header />
+        <div className="flex flex-col items-center justify-center h-64 rounded-2xl bg-gray-50">
+          <Loader2 className="w-8 h-8 text-green-600 mb-4 animate-spin" />
+          <span className="text-gray-600 font-medium">Loading properties...</span>
         </div>
-      </div>
+      </section>
     )
   }
 
+  // Error state
   if (error) {
     return (
-      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <p className="text-red-600 mb-4">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-            >
-              Try Again
-            </button>
+      <section className="max-w-7xl mx-auto px-6 py-16">
+        <Header />
+        <div className="flex flex-col items-center justify-center h-64 p-8 bg-red-50 rounded-2xl text-center">
+          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+            <span className="text-red-600 text-xl">⚠</span>
           </div>
+          <h3 className="text-lg font-semibold text-red-800 mb-2">Something went wrong</h3>
+          <p className="text-red-600 mb-6">{error}</p>
+          <Button onClick={() => window.location.reload()} className="bg-green-600 hover:bg-green-700">
+            Try Again
+          </Button>
         </div>
-      </div>
+      </section>
     )
   }
 
   return (
-    <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="hero flex pt-24 ml-20">
-        <div className="flex items-center gap-2">
-          <Flora />
-          <span className="font-[Poppins-Regular] mt-5 ml-8 text-sm text-gray-700">(Featured Properties)</span>
-        </div>
+    <section className="max-w-7xl mx-auto px-6 py-16">
+      <Header />
+
+      {/* Featured properties carousel */}
+      <div className="relative mb-16">
+        <Swiper
+          modules={[Navigation, Autoplay, Pagination]}
+          navigation={{
+            nextEl: ".swiper-button-next-custom",
+            prevEl: ".swiper-button-prev-custom",
+          }}
+          pagination={{
+            clickable: true,
+            bulletClass: "swiper-pagination-bullet !bg-green-200 !opacity-100",
+            bulletActiveClass: "!bg-green-600",
+          }}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          breakpoints={{
+            320: { slidesPerView: 1, spaceBetween: 16 },
+            768: { slidesPerView: 2, spaceBetween: 20 },
+            1024: { slidesPerView: 3, spaceBetween: 24 },
+          }}
+          className="!pb-12"
+        >
+          {properties.slice(0, 6).map((property, index) => (
+            <SwiperSlide key={property.id} className="!h-auto">
+              <PropertyCard property={property} index={index} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Custom navigation buttons */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50 z-10"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          className="swiper-button-next-custom absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50 z-10"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </Button>
       </div>
 
-      <div className="relative">
-        {/* Initial Properties Swiper */}
-        <div 
-          className={`transition-all duration-500 ease-in-out ${
-            isExpanding ? 'opacity-50' : 'opacity-100'
-          }`}
-        >
-          <Swiper
-            slidesPerView={1}
-            spaceBetween={20}
-            navigation={true}
-            modules={[Navigation]}
-            breakpoints={{
-              320: {
-                slidesPerView: 1,
-                spaceBetween: 16,
-              },
-              640: {
-                slidesPerView: 1,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              1024: {
-                slidesPerView: 3,
-                slidesPerGroup: 3,
-                spaceBetween: 20,
-              },
-            }}
-            className="mt-5"
+      {/* Additional properties grid */}
+      <AnimatePresence>
+        {showAll && properties.length > 6 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-12"
           >
-            {displayedProperties.slice(0, 6).map((property) => (
-              <SwiperSlide key={property.id}>
-                <PropertyCard property={property} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        {/* Additional Properties in Vertical Layout */}
-        {showAll && additionalProperties.length > 0 && (
-          <div className="mt-12 space-y-8">
-            <h3 className="text-xl font-[Poppins] text-gray-800 text-center mb-8">
-              More Properties
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {additionalProperties.map((property) => (
-                <div key={property.id} className="w-full">
-                  <PropertyCard property={property} />
-                </div>
+            <div className="text-center mb-12">
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">More Properties</h3>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Discover additional premium properties in our collection
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {properties.slice(6).map((property, index) => (
+                <PropertyCard key={property.id} property={property} index={index} />
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
+      </AnimatePresence>
 
-        {/* Fade overlay when not showing all properties */}
-        {!showAll && properties.length > 6 && (
-          <div className="absolute bottom-0 left-0 -ms-8 right-0 h-32 w-[104%] bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
-        )}
-
-        {/* View More Button */}
-        {properties.length > 6 && (
-          <div className="flex justify-center mt-8">
-            <button
-              onClick={handleViewMore}
-              className="flex items-center gap-2 px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 font-[Poppins-Regular] font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
-            >
-              {showAll ? (
-                <>
-                  <ChevronUp className="w-4 h-4" />
-                  View Less
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="w-4 h-4" />
-                  View More
-                </>
-              )}
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
+      {/* View more button */}
+      {properties.length > 6 && (
+        <div className="flex justify-center">
+          <Button
+            onClick={toggleViewMore}
+            variant="outline"
+            className="flex items-center gap-2 px-8 py-3 rounded-xl border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 transition-all duration-200"
+          >
+            <motion.div animate={{ rotate: showAll ? 180 : 0 }} transition={{ duration: 0.2 }}>
+              <ChevronDown className="w-4 h-4" />
+            </motion.div>
+            {showAll ? "Show Less" : `View All Properties (${properties.length})`}
+          </Button>
+        </div>
+      )}
+    </section>
   )
 }
+
+// Header component
+const Header = () => (
+  <motion.header
+    className="flex items-center justify-between mb-20"
+    initial={{ opacity: 0, y: -30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+  >
+    <div className="flex items-center gap-8">
+      <motion.div
+        initial={{ rotate: -15, scale: 0.8 }}
+        animate={{ rotate: 0, scale: 1 }}
+        transition={{ type: "spring", damping: 10 }}
+      >
+        <Flora />
+      </motion.div>
+      <span className="font-[Poppins-regular] text-sm tracking-wider text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
+        Featured Properties
+      </span>
+    </div>
+
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.5, duration: 0.5 }}
+      className="hidden md:flex items-center gap-4"
+    >
+      <span className="text-sm text-gray-500 bg-gradient-to-r from-gray-100 to-gray-50 px-6 py-3 rounded-2xl border border-gray-200 font-medium shadow-sm">
+        Featured Collection
+      </span>
+      <div className="flex items-center gap-2 text-green-600">
+        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+        <span className="text-sm font-medium">{`Live Updates`}</span>
+      </div>
+    </motion.div>
+  </motion.header>
+)

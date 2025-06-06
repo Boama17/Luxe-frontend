@@ -5,15 +5,51 @@ import Image from 'next/image';
 import one from '../../../public/house8.jpg';
 import two from '../../../public/house10.jpg';
 import three from '../../../public/house4.jpg';
+
 export default function Side() {
   const [isLiked, setIsLiked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
+  const [showTour, setShowTour] = useState(false);
+  const [showContact, setShowContact] = useState(false);
+  const [copied, setCopied] = useState(false);
+
   const propertyImages = [
     one.src,
     two.src,
     three.src,
   ];
+
+  // Share functionality
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Modern Green House',
+      text: 'Check out this property on LuxeRealty!',
+      url: typeof window !== "undefined" ? window.location.href : "",
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // User cancelled or error
+      }
+    } else {
+      navigator.clipboard.writeText(shareData.url);
+      alert("Link copied to clipboard!");
+    }
+  };
+
+  // Copy phone number
+  const handleCopyPhone = () => {
+    navigator.clipboard.writeText("0541537940");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  // Save functionality
+  const handleSave = () => {
+    setIsLiked(true);
+    // Optionally, trigger a toast or API call here
+  };
 
   return (
     <div className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden font-sans h-[90vh] flex flex-col">
@@ -43,10 +79,15 @@ export default function Side() {
               className={`p-2.5 rounded-full backdrop-blur-sm transition-all ${
                 isLiked ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-700 hover:bg-white'
               }`}
+              aria-label={isLiked ? "Unlike" : "Like"}
             >
               <Heart size={16} fill={isLiked ? 'currentColor' : 'none'} />
             </button>
-            <button className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full text-gray-700 hover:bg-white transition-all">
+            <button 
+              className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full text-gray-700 hover:bg-white transition-all"
+              onClick={handleShare}
+              aria-label="Share"
+            >
               <Share2 size={16} />
             </button>
           </div>
@@ -61,6 +102,7 @@ export default function Side() {
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentImageIndex ? 'bg-white w-6' : 'bg-white/50'
               }`}
+              aria-label={`Go to image ${index + 1}`}
             />
           ))}
         </div>
@@ -130,10 +172,30 @@ export default function Side() {
             </div>
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
           </div>
-          <button className="w-full bg-white hover:bg-gray-50 transition-all rounded-xl p-2.5 flex items-center justify-center gap-2 text-sm font-medium text-gray-900 border border-gray-200">
+          <button
+            className="w-full bg-white hover:bg-gray-50 transition-all rounded-xl p-2.5 flex items-center justify-center gap-2 text-sm font-medium text-gray-900 border border-gray-200"
+            onClick={() => setShowTour(true)}
+          >
             <Play size={16} className="text-emerald-600" />
             Start Virtual Tour
           </button>
+          {showTour && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+              <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-lg w-full relative">
+                <button
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-900"
+                  onClick={() => setShowTour(false)}
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+                <div className="text-lg font-semibold mb-4">Virtual Tour (Demo)</div>
+                <div className="aspect-video bg-gray-200 flex items-center justify-center rounded-lg">
+                  <span className="text-gray-500">[Virtual tour would appear here]</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
         {/* Agent info */}
@@ -151,22 +213,90 @@ export default function Side() {
             </div>
           </div>
           <div className="flex gap-2">
-            <button className="p-2.5 bg-white hover:bg-gray-50 rounded-xl transition-all">
+            <button
+              className="p-2.5 bg-white hover:bg-gray-50 rounded-xl transition-all relative"
+              onClick={handleCopyPhone}
+              aria-label="Copy phone number"
+            >
               <Phone size={14} className="text-gray-600" />
+              {copied && (
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-700 text-white text-xs px-3 py-1 rounded shadow z-30">
+                  Copied!
+                </span>
+              )}
             </button>
-            <button className="p-2.5 bg-white hover:bg-gray-50 rounded-xl transition-all">
+            <button
+              className="p-2.5 bg-white hover:bg-gray-50 rounded-xl transition-all"
+              onClick={() => setShowContact(true)}
+              aria-label="Contact by email"
+            >
               <Mail size={14} className="text-gray-600" />
             </button>
           </div>
         </div>
+        {/* Contact Modal */}
+        {showContact && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md w-full relative">
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-900"
+                onClick={() => setShowContact(false)}
+                aria-label="Close"
+              >
+                ×
+              </button>
+              <div className="text-lg font-semibold mb-4">Contact Agent</div>
+              <form
+                className="space-y-4"
+                onSubmit={e => {
+                  e.preventDefault();
+                  setShowContact(false);
+                  alert("Message sent!");
+                }}
+              >
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+                  required
+                />
+                <textarea
+                  placeholder="Your Message"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+                  rows={4}
+                  required
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2 rounded-lg transition-all"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
         
         {/* Action buttons */}
         <div className="flex gap-3 pt-1">
-          <button className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-semibold py-3 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+          <button
+            className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-semibold py-3 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+            onClick={() => alert("Visit scheduled!")}
+          >
             Schedule Visit
           </button>
-          <button className="px-6 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-3 rounded-2xl transition-all">
-            Save
+          <button
+            className="px-6 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-3 rounded-2xl transition-all"
+            onClick={handleSave}
+            disabled={isLiked}
+          >
+            {isLiked ? "Saved" : "Save"}
           </button>
         </div>
       </div>

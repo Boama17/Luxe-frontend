@@ -7,8 +7,9 @@ import phone from '../../assets/img/phone.svg';
 
 export default function Nav() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
-  
+
   // Close popover when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -21,6 +22,14 @@ export default function Nav() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Reset copied state after 1.5s
+  useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => setCopied(false), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
+
   return (
     <nav className="w-full px-4 lg:px-14 py-6 lg:py-10 font-[Poppins]">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
@@ -29,7 +38,7 @@ export default function Nav() {
         </span>
         
         <div className="flex items-center gap-4 lg:gap-8">
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2 relative">
             <Image 
               src={phone} 
               alt="Phone icon" 
@@ -37,9 +46,22 @@ export default function Nav() {
               height={16}
               className="w-4 h-4"
             />
-            <div className="font-semibold text-sm lg:text-base cursor-pointer text-gray-700 hover:text-emerald-800 transition-colors">
+            <button
+              className="font-semibold text-sm lg:text-base cursor-pointer text-gray-700 hover:text-emerald-800 transition-colors bg-transparent border-none outline-none"
+              onClick={() => {
+                navigator.clipboard.writeText("0541537940");
+                setCopied(true);
+              }}
+              title="Click to copy"
+              type="button"
+            >
               0541537940
-            </div>
+            </button>
+            {copied && (
+              <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-emerald-700 text-white text-xs px-3 py-1 rounded shadow transition-opacity duration-200 z-30">
+                Copied!
+              </span>
+            )}
           </div>
           
           {/* Access Popover */}
@@ -50,7 +72,7 @@ export default function Nav() {
                 isPopoverOpen 
                   ? "bg-emerald-800 text-white border-emerald-800" 
                   : "border-emerald-800 text-emerald-800 hover:bg-emerald-800 hover:text-white"
-              } rounded-full transition-all duration-300 text-sm font-medium`}
+              } rounded-full transition-all duration-300 text-sm font-medium shadow-sm`}
               aria-expanded={isPopoverOpen}
               aria-haspopup="true"
             >
@@ -69,23 +91,24 @@ export default function Nav() {
             </button>
             
             <div 
-              className={`absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl overflow-hidden z-20 transition-all duration-200 origin-top ${
+              className={`absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-emerald-100 overflow-hidden z-30 transition-all duration-200 origin-top ${
                 isPopoverOpen 
                   ? "scale-100 opacity-100" 
                   : "scale-95 opacity-0 pointer-events-none"
               }`}
             >
-              <div className="py-1">
+              <div className="py-2">
                 <Link 
                   href="/signin" 
-                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-amber-50 transition-colors"
+                  className="block px-6 py-3 text-sm text-emerald-900 hover:bg-emerald-50 hover:text-emerald-800 font-medium transition-colors"
                   onClick={() => setIsPopoverOpen(false)}
                 >
                   Sign In
                 </Link>
+                <div className="border-t border-emerald-100" />
                 <Link 
                   href="/signup" 
-                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-amber-50 transition-colors"
+                  className="block px-6 py-3 text-sm text-emerald-900 hover:bg-emerald-50 hover:text-emerald-800 font-medium transition-colors"
                   onClick={() => setIsPopoverOpen(false)}
                 >
                   Create Account
