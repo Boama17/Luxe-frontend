@@ -29,9 +29,8 @@ export default function Side() {
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-      } catch (err) {
-        // User cancelled or error
-      }
+      } catch {}
+      
     } else {
       navigator.clipboard.writeText(shareData.url);
       alert("Link copied to clipboard!");
