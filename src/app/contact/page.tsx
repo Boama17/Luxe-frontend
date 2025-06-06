@@ -118,7 +118,7 @@ const ContactPage: React.FC = () => {
         <div className="mt-6 text-center">
           <p className="text-green-700 flex items-center justify-center">
             <Mail className="h-5 w-5 mr-2" />
-            Or reach us at <a href="mailto:support@example.com" className="text-green-500 hover:text-green-700 ml-1">support@example.com</a>
+            Or reach us at <a href="mailto:calebasiedu100@gmail.com" className="text-green-500 hover:text-green-700 ml-1">calebasiedu100@gmail.com</a>
           </p>
         </div>
       </div>

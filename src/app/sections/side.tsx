@@ -226,7 +226,7 @@ export default function Side() {
             </button>
             <button
               className="p-2.5 bg-white hover:bg-gray-50 rounded-xl transition-all"
-              onClick={() => setShowContact(true)}
+              onClick={() => window.location.href = "mailto:calebaseidu100@gmail.com"}
               aria-label="Contact by email"
             >
               <Mail size={14} className="text-gray-600" />
