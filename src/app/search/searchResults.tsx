@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import Head from "next/head"
 import Image from "next/image"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { Search, Home, ChevronLeft, ChevronRight, X, Grid, List, SlidersHorizontal, MapPin, BathIcon, RulerIcon } from "lucide-react"
+import { Search, Home, ChevronLeft, ChevronRight, X, Grid, List, SlidersHorizontal, MapPin, BathIcon, RulerIcon, InfoIcon } from "lucide-react"
 import { searchProperties, type Property, type PropertySearchParams } from "../services/propertyService"
 
 const hasSearchCriteria = (filters: PropertySearchParams): boolean => {
@@ -38,6 +38,7 @@ export default function SearchResults() {
 
   const [tempFilters, setTempFilters] = useState<PropertySearchParams>(filters)
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
+  const [infoProperty, setInfoProperty] = useState<Property | null>(null)
 
   // Debounce search input
   const useDebounce = (value: string, delay: number) => {
@@ -442,11 +443,10 @@ export default function SearchResults() {
                   className={`group relative overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-300 border-0 rounded-2xl cursor-pointer ${
                     viewMode === "list" ? "flex" : ""
                   }`}
-                  onClick={() => router.push(`/property/${property.id}`)}
                 >
-                  {/* Image container with improved styling */}
+                  {/* Image container with minimal overlay */}
                   <div
-                    className={`relative overflow-hidden ${viewMode === "grid" ? "aspect-[4/3] rounded-t-2xl" : "w-64 h-48 flex-shrink-0 rounded-l-2xl"}`}
+                    className={`relative overflow-hidden ${viewMode === "grid" ? "aspect-[4/3] rounded-2xl" : "w-64 h-48 flex-shrink-0 rounded-l-2xl"}`}
                   >
                     <Image
                       src={property.imageUrl || "/placeholder.svg"}
@@ -457,97 +457,96 @@ export default function SearchResults() {
                       sizes={viewMode === "grid" ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" : "256px"}
                     />
 
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                    {/* Minimal gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
 
                     {/* Price badge */}
-                    <div className="absolute top-4 right-4">
-                      <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm">
-                        <span className="font-bold text-green-600 text-lg">{formatPrice(property.price)}</span>
+                    <div className="absolute top-4 left-4">
+                      <div className="bg-white/90 px-3 py-1 rounded-xl shadow-sm text-green-700 font-bold text-base">
+                        {formatPrice(property.price)}
                       </div>
                     </div>
 
-                    {/* Location badge */}
-                    <div className="absolute bottom-4 left-4">
-                      <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-lg">
-                        <MapPin className="w-3.5 h-3.5 text-white" />
-                        <span className="text-white text-sm font-medium">
-                          {typeof property.address === "string" && property.address
-                            ? property.address.split(",")[0]
-                            : property.location
-                              ? property.location
-                              : property.city
-                                ? property.city
-                                : "N/A"}
-                        </span>
+                    {/* Features in bottom right */}
+                    <div className="absolute bottom-4 right-4 flex gap-4 bg-white/90 rounded-xl px-4 py-2 shadow-lg items-center">
+                      <div className="flex items-center gap-2 text-base font-semibold text-green-800">
+                        <Home className="w-6 h-6" />
+                        {property.bedrooms}
+                      </div>
+                      <div className="flex items-center gap-2 text-base font-semibold text-green-800">
+                        <BathIcon className="w-6 h-6" />
+                        {property.bathrooms}
+                      </div>
+                      <div className="flex items-center gap-2 text-base font-semibold text-green-800">
+                        <RulerIcon className="w-6 h-6" />
+                        {property.area?.toLocaleString() || "N/A"}
                       </div>
                     </div>
+
+                    {/* Info icon */}
+                    <button
+                      className="absolute top-4 right-4 bg-white/90 rounded-full p-1.5 shadow hover:bg-green-100 transition"
+                      onClick={e => {
+                        e.stopPropagation();
+                        setInfoProperty(property);
+                      }}
+                      aria-label="More info"
+                      type="button"
+                    >
+                      <span className="sr-only">More info</span>
+                        <InfoIcon />
+                    </button>
                   </div>
 
-                  {/* Card content with enhanced styling */}
-                  <div className="p-6 flex-grow flex flex-col">
-                    {/* Title and rating section */}
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-2 group-hover:text-green-600 transition-colors">
-                          {property.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm font-medium line-clamp-1">{property.address}</p>
-                      </div>
-                    </div>
-
-                    {/* Property features with improved layout */}
-                    <div className="grid grid-cols-3 gap-4 pt-4 mt-auto border-t border-gray-100">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-                          <Home className="w-4 h-4 text-green-800" />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-gray-900">{property.bedrooms}</span>
-                          <span className="text-xs text-gray-500">Beds</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-                        <BathIcon size={20} color="green" />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-gray-900">{property.bathrooms}</span>
-                          <span className="text-xs text-gray-500">Baths</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-                          <RulerIcon size={20} color="green" />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-gray-900">
-                            {property.area?.toLocaleString() || "N/A"}
-                          </span>
-                          <span className="text-xs text-gray-500">Sq Ft</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* View Details button - enhanced styling */}
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                      <button
-                        className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-xl transition-all duration-200 font-medium text-sm hover:shadow-md"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          router.push(`/property/${property.id}`)
-                        }}
-                      >
-                        View Details
-                      </button>
+                  {/* Minimal card content */}
+                  <div className="p-4 flex-grow flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-bold text-base text-gray-900 mb-1 line-clamp-1 group-hover:text-green-600 transition-colors">
+                        {property.title}
+                      </h3>
+                      <p className="text-gray-500 text-xs font-medium line-clamp-1">{property.address}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-
+            {/* Info Modal */}
+            {infoProperty && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                <div className="bg-white rounded-2xl p-6 shadow-2xl max-w-lg w-full relative">
+                  <button
+                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-900"
+                    onClick={() => setInfoProperty(null)}
+                    aria-label="Close"
+                  >
+                    <X size={24} />
+                  </button>
+                  <div className="text-lg font-semibold mb-2">{infoProperty.title}</div>
+                  <div className="text-gray-700 mb-2">{infoProperty.address}</div>
+                  <div className="flex gap-4 mb-2">
+                    <div className="flex items-center gap-1 text-gray-700">
+                      <Home className="w-4 h-4 text-green-700" /> {infoProperty.bedrooms} Beds
+                    </div>
+                    <div className="flex items-center gap-1 text-gray-700">
+                      <BathIcon className="w-4 h-4 text-green-700" /> {infoProperty.bathrooms} Baths
+                    </div>
+                    <div className="flex items-center gap-1 text-gray-700">
+                      <RulerIcon className="w-4 h-4 text-green-700" /> {infoProperty.area?.toLocaleString() || "N/A"} Sq Ft
+                    </div>
+                  </div>
+                  <div className="text-gray-600 mb-4">{infoProperty.description || "No additional details."}</div>
+                  <button
+                    className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-xl transition-all duration-200 font-medium text-sm hover:shadow-md"
+                    onClick={() => {
+                      setInfoProperty(null);
+                      router.push(`/property/${infoProperty.id}`);
+                    }}
+                  >
+                    View Full Details
+                  </button>
+                </div>
+              </div>
+            )}
             {/* Enhanced Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center mt-12 space-x-2">

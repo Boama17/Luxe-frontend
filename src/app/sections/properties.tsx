@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { useRouter } from "next/navigation"
 
 import { useState, useEffect } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -200,97 +201,108 @@ export default function PropertyListing() {
   }: {
     property: Property
     index?: number
-  }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
-      className="h-full"
-    >
-      <Card className="group relative overflow-hidden h-full bg-white shadow-sm hover:shadow-xl transition-all duration-300 border-0 rounded-2xl">
-        {/* Image container with improved aspect ratio */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl">
-          <Image
-            src={property.imageUrl || "/placeholder.svg"}
-            alt={`${property.title} in ${property.location}`}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority={index < 3}
-          />
+  }) => {
+    const router = useRouter()
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.1, duration: 0.5 }}
+        className="h-full font-[Poppins-regular]"
+      >
+        <Card className="group relative overflow-hidden h-full bg-white shadow-sm hover:shadow-xl transition-all duration-300 border-0 rounded-2xl">
+          {/* Image container with improved aspect ratio */}
+          <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl">
+            <Image
+              src={property.imageUrl || "/placeholder.svg"}
+              alt={`${property.title} in ${property.location}`}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={index < 3}
+            />
 
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
 
-          {/* Top badges and buttons */}
-          <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-            {/* New badge */}
-            {property.isNew && (
-              <Badge className="bg-green-500 hover:bg-green-600 text-white border-0 px-3 py-1 text-xs font-medium">
-                New
-              </Badge>
-            )}
+            {/* Top badges and buttons */}
+            <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
+              {/* New badge */}
+              {property.isNew && (
+                <Badge className="bg-green-500 hover:bg-green-600 text-white border-0 px-3 py-1 text-xs font-medium">
+                  New
+                </Badge>
+              )}
 
-            {/* Favorite button */}
+              {/* Favorite button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  toggleFavorite(String(property.id))
+                }}
+                className="ml-auto w-9 h-9 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full shadow-sm border-0"
+              >
+                <Heart
+                  className={`w-4 h-4 transition-colors ${
+                    favorites.has(String(property.id)) ? "text-red-500 fill-red-500" : "text-gray-600 hover:text-red-500"
+                  }`}
+                />
+              </Button>
+            </div>
+
+            {/* Price badge */}
+            <div className="absolute top-4 right-4">
+              <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm">
+                <span className="font-bold text-green-600 text-lg">{formatPrice(property.price, property.currency)}</span>
+              </div>
+            </div>
+
+            {/* Location badge */}
+            <div className="absolute bottom-4 left-4">
+              <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-lg">
+                <MapPin className="w-3.5 h-3.5 text-white" />
+                <span className="text-white text-sm font-medium">{property.location}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card content with better spacing */}
+          <CardContent className="p-6 flex flex-col h-full">
+            {/* Title and rating */}
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1 group-hover:text-green-600 transition-colors">
+                  {property.title}
+                </h3>
+                <p className="text-gray-600 text-sm font-medium">{property.city}</p>
+              </div>
+              <div className="flex items-center gap-1 ml-3">
+                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                <span className="text-sm font-semibold text-gray-700">{property.rating}</span>
+              </div>
+            </div>
+
+            {/* Property features with improved layout */}
+            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+              <PropertyFeature icon={BedDouble} value={property.bedrooms} label="Beds" />
+              <PropertyFeature icon={Bath} value={property.bathrooms} label="Baths" />
+              <PropertyFeature icon={Ruler} value={property.area} label="Sq Ft" />
+            </div>
+
+            {/* View Details button */}
             <Button
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation()
-                toggleFavorite(String(property.id))
-              }}
-              className="ml-auto w-9 h-9 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full shadow-sm border-0"
+              className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white"
+              onClick={() => router.push(`/property/${property.id}`)}
             >
-              <Heart
-                className={`w-4 h-4 transition-colors ${
-                  favorites.has(String(property.id)) ? "text-red-500 fill-red-500" : "text-gray-600 hover:text-red-500"
-                }`}
-              />
+              View Details
             </Button>
-          </div>
-
-          {/* Price badge */}
-          <div className="absolute top-4 right-4">
-            <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm">
-              <span className="font-bold text-green-600 text-lg">{formatPrice(property.price, property.currency)}</span>
-            </div>
-          </div>
-
-          {/* Location badge */}
-          <div className="absolute bottom-4 left-4">
-            <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-lg">
-              <MapPin className="w-3.5 h-3.5 text-white" />
-              <span className="text-white text-sm font-medium">{property.location}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card content with better spacing */}
-        <CardContent className="p-6 flex flex-col h-full">
-          {/* Title and rating */}
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1 group-hover:text-green-600 transition-colors">
-                {property.title}
-              </h3>
-              <p className="text-gray-600 text-sm font-medium">{property.city}</p>
-            </div>
-            <div className="flex items-center gap-1 ml-3">
-              <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-              <span className="text-sm font-semibold text-gray-700">{property.rating}</span>
-            </div>
-          </div>
-
-          {/* Property features with improved layout */}
-          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
-            <PropertyFeature icon={BedDouble} value={property.bedrooms} label="Beds" />
-            <PropertyFeature icon={Bath} value={property.bathrooms} label="Baths" />
-            <PropertyFeature icon={Ruler} value={property.area} label="Sq Ft" />
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  )
+          </CardContent>
+        </Card>
+      </motion.div>
+    )
+  }
 
   // Loading state
   if (loading) {

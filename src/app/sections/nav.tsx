@@ -64,8 +64,8 @@ export default function Nav() {
             )}
           </div>
           
-          {/* Access Popover */}
-          <div className="relative hidden md:block" ref={popoverRef}>
+          {/* Join Us Popover */}
+          <div className="relative" ref={popoverRef}>
             <button 
               onClick={() => setIsPopoverOpen(!isPopoverOpen)}
               className={`flex items-center gap-2 px-4 py-2 border ${
@@ -76,7 +76,7 @@ export default function Nav() {
               aria-expanded={isPopoverOpen}
               aria-haspopup="true"
             >
-              <span>Gain Access</span>
+              <span>Join Us</span>
               <svg 
                 className={`w-4 h-4 transition-transform duration-200 ${
                   isPopoverOpen ? "rotate-180" : ""
@@ -116,14 +116,7 @@ export default function Nav() {
               </div>
             </div>
           </div>
-          
-          {/* Mobile Sign In Button */}
-          <Link 
-            href="/signin" 
-            className="md:hidden flex items-center justify-center px-3 py-1.5 text-sm bg-emerald-800 text-white rounded-md hover:bg-emerald-700 transition-colors"
-          >
-            Sign In
-          </Link>
+
           
           <Ham />
         </div>

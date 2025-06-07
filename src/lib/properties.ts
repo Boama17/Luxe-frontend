@@ -18,6 +18,8 @@ import twelve from "../../public/house12.jpg"
 import { ReactNode } from "react"
 
 export interface Property {
+  isNew: any
+  rating: ReactNode
   address: ReactNode;
   id: number;
   title: string;
