@@ -443,8 +443,8 @@ const Header = () => (
   >
     <div className="flex items-center gap-8">
       <motion.div
-        initial={{ rotate: -15, scale: 0.8 }}
-        animate={{ rotate: 0, scale: 1 }}
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
         transition={{ type: "spring", damping: 10 }}
       >
         <Flora />

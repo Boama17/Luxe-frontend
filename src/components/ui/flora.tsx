@@ -3,7 +3,7 @@ import React from 'react'
 function Flora() {
   return (
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                        className='size-14 mr-[-2rem] animate-spin-slow' viewBox="0 0 300.000000 300.000000"
+                        className="size-14 mr-[-2rem] spin-slow" viewBox="0 0 300.000000 300.000000"
                         preserveAspectRatio="xMidYMid meet">
                         <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"
                         fill="#166534" stroke="none">

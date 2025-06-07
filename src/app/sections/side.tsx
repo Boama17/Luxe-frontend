@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Play, Heart, Share2, MapPin, BathIcon, BedIcon, RulerIcon, X, Star, Phone, Mail, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Heart, Share2, MapPin, BathIcon, BedIcon, RulerIcon, X, Star, Phone, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from "next/image";
 import one from "@/../public/house13.jpeg"; 
-const two = { src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&h=400&fit=crop" };
-const three = { src: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&h=400&fit=crop" };
-
+import two from "@/../public/house14.jpeg";
+import three from "@/../public/house15.jpeg";
 
 const propertyData = [
   {
@@ -69,12 +69,12 @@ export default function PropertyListing() {
       text: `${property.title} - ${property.price}`,
       url: typeof window !== "undefined" ? window.location.href : "",
     };
-    
+
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-      } catch (err) {
-        console.log('Share cancelled');
+      } catch {
+        // Share cancelled or failed, do nothing
       }
     } else {
       await navigator.clipboard.writeText(shareData.url);
@@ -101,9 +101,10 @@ export default function PropertyListing() {
       {/* Image Section */}
       <div className="relative">
         <div className="aspect-[4/3] bg-gray-100 overflow-hidden relative">
-          <img 
+          <Image 
             src={property.image}
             alt={property.title}
+            fill
             className="w-full h-full object-cover"
           />
           

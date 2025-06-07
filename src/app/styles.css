@@ -75,3 +75,6 @@
     }
   }
   
+.spin-slow{
+    animation: spin 5s linear infinite; 
+}

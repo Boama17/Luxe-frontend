@@ -14,13 +14,10 @@ import eleven from "../../public/house11.jpg"
 import twelve from "../../public/house12.jpg"
 
 
-
-import { ReactNode } from "react"
-
 export interface Property {
-  isNew: any
-  rating: ReactNode
-  address: ReactNode;
+  isNew: string;
+  rating: number;
+  address: string;
   id: number;
   title: string;
   price: number;
@@ -52,7 +49,9 @@ const Properties: Property[] = [
     imageUrl: one.src,
     description: "Beautiful modern house in prestigious East Legon with contemporary finishes",
     propertyType: "House",
-    address: undefined
+    address: "East Legon, Accra, Greater Accra",
+    rating: 4.7,
+    isNew: "New"
   },
   {
     id: 2,
@@ -68,7 +67,9 @@ const Properties: Property[] = [
     imageUrl: two.src,
     description: "Luxury villa near Kotoka International Airport with premium amenities",
     propertyType: "Villa",
-    address: undefined
+    address: "Airport Residential, Accra, Greater Accra",
+    rating: 4.9,
+    isNew: "Featured"
   },
   {
     id: 3,
@@ -84,7 +85,9 @@ const Properties: Property[] = [
     imageUrl: three.src,
     description: "Comfortable family home in quiet neighborhood with garden space",
     propertyType: "House",
-    address: undefined
+    address: "Tema Community 25, Tema, Greater Accra",
+    rating: 4.3,
+    isNew: "Featured"
   },
   {
     id: 4,
@@ -100,7 +103,9 @@ const Properties: Property[] = [
     imageUrl: four.src,
     description: "Modern house in exclusive gated community with 24/7 security",
     propertyType: "House",
-    address: undefined
+    address: "Trasacco Estate, Accra, Greater Accra",
+    rating: 4.8,
+    isNew: "Featured"
   },
   {
     id: 5,
@@ -116,7 +121,9 @@ const Properties: Property[] = [
     imageUrl: five.src,
     description: "Large villa with swimming pool, garden, and panoramic city views",
     propertyType: "Villa",
-    address: undefined
+    address: "Roman Ridge, Accra, Greater Accra",
+    rating: 4.6,
+    isNew: "New"
   },
   {
     id: 6,
@@ -132,7 +139,9 @@ const Properties: Property[] = [
     imageUrl: six.src,
     description: "Affordable family home with modern amenities and parking space",
     propertyType: "House",
-    address: undefined
+    address: "Adenta Housing Down, Adenta, Greater Accra",
+    rating: 4.1,
+    isNew: "New"
   },
   {
     id: 7,
@@ -148,7 +157,9 @@ const Properties: Property[] = [
     imageUrl: seven.src,
     description: "Elegant townhouse in prime Cantonments location with rooftop terrace",
     propertyType: "Townhouse",
-    address: undefined
+    address: "Cantonments, Accra, Greater Accra",
+    rating: 4.5,
+    isNew: "New"
   },
   {
     id: 8,
@@ -164,7 +175,9 @@ const Properties: Property[] = [
     imageUrl: eight.src,
     description: "Modern home with beautiful garden views and open-plan living",
     propertyType: "Estate",
-    address: undefined
+    address: "Spintex Road, Accra, Greater Accra",
+    rating: 4.2,
+    isNew: "Featured"
   },
   {
     id: 9,
@@ -180,7 +193,9 @@ const Properties: Property[] = [
     imageUrl: nine.src,
     description: "Sophisticated duplex with study room and domestic quarters",
     propertyType: "Duplex",
-    address: undefined
+    address: "Dzorwulu, Accra, Greater Accra",
+    rating: 4.9,
+    isNew: "New"
   },
   {
     id: 10,
@@ -196,7 +211,9 @@ const Properties: Property[] = [
     imageUrl: ten.src,
     description: "Serene home near the coast with sea breeze and tropical landscaping",
     propertyType: "House",
-    address: undefined
+    address: "Nungua, Accra, Greater Accra",
+    rating: 3.8,
+    isNew: "Featured"
   },
   {
     id: 11,
@@ -212,7 +229,9 @@ const Properties: Property[] = [
     imageUrl: eleven.src,
     description: "Magnificent mansion with breathtaking mountain views and wine cellar",
     propertyType: "Mansion",
-    address: undefined
+    address: "Peduase, Aburi, Eastern Region",
+    rating: 4.6,
+    isNew: "New"
   },
   {
     id: 12,
@@ -228,9 +247,13 @@ const Properties: Property[] = [
     imageUrl: twelve.src,
     description: "Trendy loft apartment in vibrant Osu with high ceilings and modern fixtures",
     propertyType: "Loft",
-    address: undefined
+    address: "Osu, Accra, Greater Accra",
+    rating: 4.0,
+    isNew: "Featured"
   },
-]
+];
+
+
 
 // Simulate API call with loading time
 export async function fetchProperties(): Promise<Property[]> {

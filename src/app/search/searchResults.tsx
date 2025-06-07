@@ -522,7 +522,10 @@ export default function SearchResults() {
                     <X size={24} />
                   </button>
                   <div className="text-lg font-semibold mb-2">{infoProperty.title}</div>
-                  <div className="text-gray-700 mb-2">{infoProperty.address}</div>
+                    <div className="flex items-center gap-2 bg-gray-200 rounded-lg p-2 mb-2">
+                    <MapPin className="text-gray-500" size={16} />
+                    <span className="text-gray-700">{infoProperty.address}</span>
+                    </div>
                   <div className="flex gap-4 mb-2">
                     <div className="flex items-center gap-1 text-gray-700">
                       <Home className="w-4 h-4 text-green-700" /> {infoProperty.bedrooms} Beds

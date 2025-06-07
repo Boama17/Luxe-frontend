@@ -28,8 +28,8 @@ export default function About() {
         <header className="flex flex-col lg:flex-row items-start justify-between gap-12 mb-24">
           <div className="flex items-center gap-8">
             <motion.div
-              initial={{ rotate: -15, scale: 0.8 }}
-              animate={{ rotate: 0, scale: 1 }}
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
               transition={{ type: "spring", damping: 10 }}
             >
               <Flora />

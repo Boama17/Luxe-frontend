@@ -51,9 +51,7 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
-  		animation: {
-  			'spin-slow': 'spin 5s linear infinite'
-  		},
+  		
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
