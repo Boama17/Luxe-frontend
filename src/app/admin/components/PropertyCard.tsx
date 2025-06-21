@@ -1,5 +1,5 @@
 import { MoreVertical, Eye, MessageSquare, MapPin } from "lucide-react";
-
+import Image from "next/image";
 import { Property } from "@/lib/properties";
 
 interface PropertyCardProps {
@@ -10,9 +10,10 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 overflow-hidden hover:shadow-xl transition-shadow duration-200 group">
       <div className="relative h-48 bg-gray-100">
-        <img
+        <Image
           src={property.imageUrl}
           alt={property.title}
+          fill
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />

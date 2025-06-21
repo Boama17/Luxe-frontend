@@ -1,4 +1,6 @@
-  // lib/authService.js
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+// lib/authService.js
   import { 
       createUserWithEmailAndPassword,
       signInWithEmailAndPassword,
@@ -10,8 +12,6 @@
       onAuthStateChanged,
       RecaptchaVerifier,
       signInWithPhoneNumber,
-      PhoneAuthProvider,
-      signInWithCredential
     } from "firebase/auth";
     import { auth } from "./firebase";
     

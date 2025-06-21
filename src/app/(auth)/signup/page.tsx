@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 //sign-up
 "use client"
 import { useState } from "react";
@@ -8,7 +11,7 @@ import three from "../../../assets/img/three.jpg";
 import Footer from "@/app/sections/footer";
 import { authService } from "@/app/services/authService"; 
 import { useRouter } from "next/navigation"; 
-import { auth } from "@/app/services/firebase"; 
+
 
 type FormData = {
   firstName: string;
@@ -263,7 +266,7 @@ export default function SignupPage() {
       // Create user account with Firebase Auth
       // Uncomment and modify based on your auth service implementation
       
-      const userCredential = await authService.registerWithEmail(
+      const _userCredential = await authService.registerWithEmail(
         formData.email,
         formData.password,
         formData.firstName,
@@ -286,7 +289,7 @@ export default function SignupPage() {
         console.log("Redirecting to admin...");
       }, 2000);
       
-    } catch (error: any) {
+    } catch (error: string | any) {
       console.error("Registration error:", error);
       let errorMessage = 'Registration failed. Please try again.';
       

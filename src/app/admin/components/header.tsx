@@ -3,20 +3,22 @@ import { useState, useEffect } from "react";
 import { Bell, User, LogOut, Settings, ChevronDown } from "lucide-react";
 import { authService } from "@/app/services/authService";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { User as FirebaseUser } from "firebase/auth";
 
 interface HeaderProps {
   activeTab: string;
 }
 
 export default function Header({ activeTab }: HeaderProps) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     // Listen for authentication state changes
-    const unsubscribe = authService.onAuthStateChanged((user: any) => {
+    const unsubscribe = authService.onAuthStateChanged((user: FirebaseUser | null) => {
       setUser(user);
       setIsLoading(false);
       
@@ -56,12 +58,12 @@ export default function Header({ activeTab }: HeaderProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const getDisplayName = () => {
+  const getDisplayName = (): string => {
     if (!user) return 'User';
     return user.displayName || user.email?.split('@')[0] || 'User';
   };
 
-  const getInitials = () => {
+  const getInitials = (): string => {
     const name = getDisplayName();
     return name.charAt(0).toUpperCase();
   };
@@ -103,11 +105,15 @@ export default function Header({ activeTab }: HeaderProps) {
             className="flex items-center gap-2 p-2 hover:bg-emerald-100 rounded-lg transition-colors"
           >
             {user?.photoURL ? (
-              <img
-                src={user.photoURL}
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover"
-              />
+              <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                <Image
+                  src={user.photoURL}
+                  alt="Profile"
+                  fill
+                  className="object-cover"
+                  sizes="40px"
+                />
+              </div>
             ) : (
               <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
                 <span className="text-emerald-700 font-medium text-sm">
