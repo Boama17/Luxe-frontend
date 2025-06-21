@@ -76,7 +76,7 @@ export default function Nav() {
               aria-expanded={isPopoverOpen}
               aria-haspopup="true"
             >
-              <span>Join Us</span>
+              <span>Become an agent</span>
               <svg 
                 className={`w-4 h-4 transition-transform duration-200 ${
                   isPopoverOpen ? "rotate-180" : ""
