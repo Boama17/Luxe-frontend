@@ -50,7 +50,7 @@ const mockProperties = [
     bedrooms: 3,
     bathrooms: 2,
     area: 1200,
-    imageUrl: one.src,
+    status: "active",    imageUrl: one.src,
     rating: 4.8,
     isNew: true,
   },

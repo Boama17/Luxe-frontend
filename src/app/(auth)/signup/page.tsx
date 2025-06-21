@@ -1,3 +1,4 @@
+//sign-up
 "use client"
 import { useState } from "react";
 import Image from "next/image";
@@ -5,6 +6,9 @@ import one from "../../../assets/img/one.jpg";
 import two from "../../../assets/img/two.png";
 import three from "../../../assets/img/three.jpg";
 import Footer from "@/app/sections/footer";
+import { authService } from "@/app/services/authService"; 
+import { useRouter } from "next/navigation"; 
+import { auth } from "@/app/services/firebase"; 
 
 type FormData = {
   firstName: string;
@@ -37,6 +41,47 @@ export default function SignupPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  
+  // Add these additional state variables:
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const router = useRouter(); 
+
+  const propertyTypes = [
+    { 
+      name: "Residential", 
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+      )
+    },
+    { 
+      name: "Commercial", 
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      )
+    },
+    { 
+      name: "Investment", 
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      )
+    },
+    { 
+      name: "Luxury", 
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+      )
+    }
+  ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -78,30 +123,102 @@ export default function SignupPage() {
           ? [...prev.interests, value]
           : prev.interests.filter(interest => interest !== value),
       }));
+      
+      // Clear interests error when user selects an option
+      if (errors.interests) {
+        setErrors(prev => {
+          const updated = {...prev};
+          delete updated.interests;
+          return updated;
+        });
+      }
     }
   };
 
+  // Enhanced password validation function:
+  const validatePassword = (password: string): string | null => {
+    if (!password) return "Password is required";
+    if (password.length < 8) return "Password must be at least 8 characters";
+    if (!/(?=.*[a-z])/.test(password)) return "Password must contain at least one lowercase letter";
+    if (!/(?=.*[A-Z])/.test(password)) return "Password must contain at least one uppercase letter";
+    if (!/(?=.*\d)/.test(password)) return "Password must contain at least one number";
+    if (!/(?=.*[@$!%*?&])/.test(password)) return "Password must contain at least one special character";
+    return null;
+  };
+
+  // Update your validateStep function to use enhanced password validation:
   const validateStep = (step: number): boolean => {
     const newErrors: FormErrors = {};
     
     if (step === 1) {
-      if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
-      if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
+      // First name validation
+      if (!formData.firstName.trim()) {
+        newErrors.firstName = "First name is required";
+      } else if (formData.firstName.trim().length < 2) {
+        newErrors.firstName = "First name must be at least 2 characters long";
+      } else if (formData.firstName.trim().length > 50) {
+        newErrors.firstName = "First name must be less than 50 characters";
+      } else if (!/^[a-zA-Z\s'-]+$/.test(formData.firstName.trim())) {
+        newErrors.firstName = "First name can only contain letters, spaces, hyphens, and apostrophes";
+      } else if (/^\s|\s$/.test(formData.firstName)) {
+        newErrors.firstName = "First name cannot start or end with spaces";
+      }
+    
+      // Last name validation
+      if (!formData.lastName.trim()) {
+        newErrors.lastName = "Last name is required";
+      } else if (formData.lastName.trim().length < 2) {
+        newErrors.lastName = "Last name must be at least 2 characters long";
+      } else if (formData.lastName.trim().length > 50) {
+        newErrors.lastName = "Last name must be less than 50 characters";
+      } else if (!/^[a-zA-Z\s'-]+$/.test(formData.lastName.trim())) {
+        newErrors.lastName = "Last name can only contain letters, spaces, hyphens, and apostrophes";
+      } else if (/^\s|\s$/.test(formData.lastName)) {
+        newErrors.lastName = "Last name cannot start or end with spaces";
+      }
+    
+      // Email validation
       if (!formData.email.trim()) {
         newErrors.email = "Email is required";
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = "Please enter a valid email";
+      } else if (formData.email.length > 254) {
+        newErrors.email = "Email address is too long";
+      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
+        newErrors.email = "Please enter a valid email address";
+      } else if (formData.email.includes('..')) {
+        newErrors.email = "Email cannot contain consecutive dots";
+      } else if (formData.email.startsWith('.') || formData.email.endsWith('.')) {
+        newErrors.email = "Email cannot start or end with a dot";
+      } else if (formData.email.includes('@.') || formData.email.includes('.@')) {
+        newErrors.email = "Invalid email format";
+      } else {
+        // Additional checks for domain part
+        const [localPart, domainPart] = formData.email.split('@');
+        if (localPart.length > 64) {
+          newErrors.email = "Email local part is too long";
+        } else if (domainPart.length > 253) {
+          newErrors.email = "Email domain is too long";
+        } else if (domainPart.split('.').some(part => part.length > 63)) {
+          newErrors.email = "Email domain labels are too long";
+        }
       }
+    
+      // Phone validation (for Ghana +233 format)
       if (!formData.phone.trim()) {
         newErrors.phone = "Phone number is required";
+      } else {
+        const cleanPhone = formData.phone.replace(/\s+/g, '');
+        if (!/^\d{9}$/.test(cleanPhone)) {
+          newErrors.phone = "Please enter exactly 9 digits";
+        } else if (!['20', '23', '24', '26', '27', '28', '30', '50', '53', '54', '55', '56', '57', '59'].some(prefix => cleanPhone.startsWith(prefix))) {
+          newErrors.phone = "Please enter a valid Ghana phone number";
+        }
       }
     }
     
     if (step === 2) {
-      if (!formData.password) {
-        newErrors.password = "Password is required";
-      } else if (formData.password.length < 8) {
-        newErrors.password = "Password must be at least 8 characters";
+      const passwordError = validatePassword(formData.password);
+      if (passwordError) {
+        newErrors.password = passwordError;
       }
       
       if (!formData.confirmPassword) {
@@ -133,48 +250,71 @@ export default function SignupPage() {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Replace your existing handleSubmit function with this enhanced version:
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateStep(currentStep)) {
-      console.log("Form submitted:", formData);
-      // Redirect or show success message
+    if (!validateStep(currentStep)) return;
+    
+    setIsLoading(true);
+    setSubmitError('');
+    setShowSuccess(false);
+    
+    try {
+      // Create user account with Firebase Auth
+      // Uncomment and modify based on your auth service implementation
+      
+      const userCredential = await authService.registerWithEmail(
+        formData.email,
+        formData.password,
+        formData.firstName,
+        formData.lastName
+      );
+      
+      
+      // Simulate API call for demonstration
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      console.log("User registered successfully:", formData);
+      setShowSuccess(true);
+      
+      // Optional: Send verification email
+      // await authService.sendEmailVerification();
+      
+      // Redirect after short delay to show success message
+      setTimeout(() => {
+          router.push('/admin'); // Uncomment when you have router
+        console.log("Redirecting to admin...");
+      }, 2000);
+      
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      // Handle specific Firebase Auth errors
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'An account with this email already exists.';
+            break;
+          case 'auth/weak-password':
+            errorMessage = 'Password is too weak. Please choose a stronger password.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Please enter a valid email address.';
+            break;
+          case 'auth/network-request-failed':
+            errorMessage = 'Network error. Please check your connection and try again.';
+            break;
+          default:
+            errorMessage = error.message || errorMessage;
+        }
+      }
+      
+      setSubmitError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const propertyTypes = [
-    { 
-      name: "Residential", 
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      )
-    },
-    { 
-      name: "Commercial", 
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-      )
-    },
-    { 
-      name: "Investment", 
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    { 
-      name: "Luxury", 
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-        </svg>
-      )
-    }
-  ];
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -330,15 +470,21 @@ export default function SignupPage() {
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                       Phone Number
                     </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent`}
-                      placeholder="(123) 456-7890"
-                    />
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span className="text-gray-500 sm:text-sm">+233</span>
+                      </div>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className={`w-full pl-16 pr-4 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent`}
+                        placeholder="54 321-0987"
+                        maxLength={10}
+                      />
+                    </div>
                     {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                   </div>
 
@@ -359,7 +505,7 @@ export default function SignupPage() {
                 <>
                   <div className="space-y-1 relative">
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                      Password
+                      Create a Password
                     </label>
                     <div className="relative">
                       <input
@@ -369,7 +515,7 @@ export default function SignupPage() {
                         value={formData.password}
                         onChange={handleInputChange}
                         className={`w-full px-4 py-3 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent`}
-                        placeholder="••••••••"
+                        placeholder="Set a secure password"
                       />
                       <button
                         type="button"
@@ -403,7 +549,7 @@ export default function SignupPage() {
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         className={`w-full px-4 py-3 rounded-lg border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-emerald-800 focus:border-transparent`}
-                        placeholder="••••••••"
+                        placeholder="Re-enter your password"
                       />
                       <button
                         type="button"
@@ -422,12 +568,13 @@ export default function SignupPage() {
                         )}
                       </button>
                     </div>
+                    
                     {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
                   </div>
 
-                  <fieldset className="space-y-3">
+<fieldset className="space-y-3">
                     <legend className="text-sm font-medium text-gray-700">
-                      I&apos;m interested in
+                      What type of properties do you want to sell?
                     </legend>
                     <div className="grid grid-cols-2 gap-3">
                       {propertyTypes.map((type) => (
@@ -485,30 +632,59 @@ export default function SignupPage() {
                       />
                     </div>
                     <label htmlFor="terms" className="ml-3 text-sm text-gray-700">
-                      I agree to the <a href="#" className="text-emerald-800 hover:underline font-medium">Terms and Conditions</a>
+                      I confirm that I am an agent or property owner and agree to the <a href="#" className="text-emerald-800 hover:underline font-medium">Terms and Conditions</a> for listing properties on LuxeRealty.
                     </label>
                   </div>
                   {errors.terms && <p className="text-red-500 text-xs -mt-4">{errors.terms}</p>}
+
+                  {/* Error message display */}
+                  {submitError && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-red-600 text-sm">{submitError}</p>
+                    </div>
+                  )}
+
+                  {/* Success message display */}
+                  {showSuccess && (
+                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <p className="text-green-600 text-sm">Registration successful! Redirecting...</p>
+                    </div>
+                  )}
 
                   <div className="flex space-x-4">
                     <button
                       type="button"
                       onClick={handlePrevStep}
-                      className="w-1/2 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
+                      disabled={isLoading}
+                      className="w-1/2 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-300 disabled:cursor-not-allowed text-gray-800 py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
                     >
                       <svg className="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                       </svg>
                       Back
                     </button>
+                    
                     <button
                       type="submit"
-                      className="w-1/2 bg-emerald-800 hover:bg-emerald-900 text-white py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
+                      disabled={isLoading}
+                      className="w-1/2 bg-emerald-800 hover:bg-emerald-900 disabled:bg-emerald-400 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
                     >
-                      Create Account
-                      <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                      </svg>
+                      {isLoading ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Registering...
+                        </>
+                      ) : (
+                        <>
+                          Register
+                          <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                          </svg>
+                        </>
+                      )}
                     </button>
                   </div>
                 </>

@@ -20,7 +20,11 @@ export interface Property {
   address: string;
   id: number;
   title: string;
+  agent: string;
+  views: number;
+  inquiries: number;
   price: number;
+  status: string; 
   currency: string;
   bedrooms: number;
   bathrooms: number;
@@ -51,7 +55,11 @@ const Properties: Property[] = [
     propertyType: "House",
     address: "East Legon, Accra, Greater Accra",
     rating: 4.7,
-    isNew: "New"
+    isNew: "New",
+    status: "active",
+    agent: "Abena Realty",
+    views: 115,
+    inquiries: 10
   },
   {
     id: 2,
@@ -69,7 +77,11 @@ const Properties: Property[] = [
     propertyType: "Villa",
     address: "Airport Residential, Accra, Greater Accra",
     rating: 4.9,
-    isNew: "Featured"
+    isNew: "Featured",
+    status: "active",
+    agent: "Kwame Estates",
+    views: 210,
+    inquiries: 17
   },
   {
     id: 3,
@@ -87,7 +99,11 @@ const Properties: Property[] = [
     propertyType: "House",
     address: "Tema Community 25, Tema, Greater Accra",
     rating: 4.3,
-    isNew: "Featured"
+    isNew: "Featured",
+    status: "active",
+    agent: "Nana Homes",
+    views: 98,
+    inquiries: 6
   },
   {
     id: 4,
@@ -105,7 +121,11 @@ const Properties: Property[] = [
     propertyType: "House",
     address: "Trasacco Estate, Accra, Greater Accra",
     rating: 4.8,
-    isNew: "Featured"
+    isNew: "Featured",
+    status: "active",
+    agent: "Esi Realty",
+    views: 190,
+    inquiries: 14
   },
   {
     id: 5,
@@ -123,7 +143,11 @@ const Properties: Property[] = [
     propertyType: "Villa",
     address: "Roman Ridge, Accra, Greater Accra",
     rating: 4.6,
-    isNew: "New"
+    isNew: "New",
+    status: "active",
+    agent: "Legacy Properties",
+    views: 232,
+    inquiries: 19
   },
   {
     id: 6,
@@ -141,7 +165,11 @@ const Properties: Property[] = [
     propertyType: "House",
     address: "Adenta Housing Down, Adenta, Greater Accra",
     rating: 4.1,
-    isNew: "New"
+    isNew: "New",
+    status: "active",
+    agent: "Mansa Realty",
+    views: 87,
+    inquiries: 5
   },
   {
     id: 7,
@@ -159,7 +187,11 @@ const Properties: Property[] = [
     propertyType: "Townhouse",
     address: "Cantonments, Accra, Greater Accra",
     rating: 4.5,
-    isNew: "New"
+    isNew: "New",
+    status: "active",
+    agent: "Obaapa Homes",
+    views: 176,
+    inquiries: 13
   },
   {
     id: 8,
@@ -177,7 +209,11 @@ const Properties: Property[] = [
     propertyType: "Estate",
     address: "Spintex Road, Accra, Greater Accra",
     rating: 4.2,
-    isNew: "Featured"
+    isNew: "Featured",
+    status: "active",
+    agent: "Yaw Properties",
+    views: 154,
+    inquiries: 11
   },
   {
     id: 9,
@@ -195,7 +231,11 @@ const Properties: Property[] = [
     propertyType: "Duplex",
     address: "Dzorwulu, Accra, Greater Accra",
     rating: 4.9,
-    isNew: "New"
+    isNew: "New",
+    status: "active",
+    agent: "Efua Estates",
+    views: 220,
+    inquiries: 18
   },
   {
     id: 10,
@@ -213,7 +253,11 @@ const Properties: Property[] = [
     propertyType: "House",
     address: "Nungua, Accra, Greater Accra",
     rating: 3.8,
-    isNew: "Featured"
+    isNew: "Featured",
+    status: "active",
+    agent: "Amma Homes",
+    views: 142,
+    inquiries: 9
   },
   {
     id: 11,
@@ -231,7 +275,11 @@ const Properties: Property[] = [
     propertyType: "Mansion",
     address: "Peduase, Aburi, Eastern Region",
     rating: 4.6,
-    isNew: "New"
+    isNew: "New",
+    status: "active",
+    agent: "Elite Estates",
+    views: 305,
+    inquiries: 25
   },
   {
     id: 12,
@@ -249,9 +297,15 @@ const Properties: Property[] = [
     propertyType: "Loft",
     address: "Osu, Accra, Greater Accra",
     rating: 4.0,
-    isNew: "Featured"
-  },
+    isNew: "Featured",
+    status: "active",
+    agent: "Kojo Realty",
+    views: 130,
+    inquiries: 8
+  }
 ];
+
+
 
 
 
