@@ -339,14 +339,12 @@ export async function getPropertyById(id: number): Promise<Property | null> {
 }
 
 // Format price based on listing type
-export function formatPrice(price: number, currency = "GHS", listingType: "rent" | "sale" = "sale"): string {
-  const formattedPrice = `₵${price.toLocaleString()}`;
-  
-  if (listingType === "rent") {
-    return `${formattedPrice}/month`;
-  }
-  
-  return formattedPrice;
+export function formatPrice(price: number, currency: string, listingType: "rent" | "sale") {
+    const formattedPrice = `₵${price.toLocaleString()}`;
+    if (listingType === "rent") {
+        return `${formattedPrice}/mo`;
+    }
+    return formattedPrice;
 }
 
 // Get properties by listing type

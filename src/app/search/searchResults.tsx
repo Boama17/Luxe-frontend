@@ -1,4 +1,5 @@
-// src/app/search/searchResults.tsx
+
+
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
@@ -7,7 +8,7 @@ import Image from "next/image"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { Search, Home, ChevronLeft, ChevronRight, X, Grid, List, SlidersHorizontal, MapPin, BathIcon, RulerIcon, InfoIcon } from "lucide-react"
 import { searchProperties, type PropertySearchParams } from "../services/propertyService"
-import { Property, formatPrice } from "@/lib/properties" // Updated import
+import { Property } from "@/lib/properties" // Updated import
 
 const hasSearchCriteria = (filters: PropertySearchParams): boolean => {
   return !!(filters.search && filters.search.trim().length > 0)

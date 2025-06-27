@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import PropertyCard from "../components/PropertyCard";
 import { Plus, Search } from "lucide-react";
 

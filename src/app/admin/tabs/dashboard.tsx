@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import StatCard from "../components/StatCard";
 import PropertyCard from "../components/PropertyCard";
 import { Plus, UserCheck, MessageCircle } from "lucide-react";
