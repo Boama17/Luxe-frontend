@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Play, Heart, Share2, MapPin, BathIcon, BedIcon, RulerIcon, X, Star, Phone, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Heart, MapPin, BathIcon, BedIcon, RulerIcon, X, Star, Phone, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from "next/image";
-import one from "@/../public/house13.jpeg"; 
+import one from "@/../public/house3.jpg"; 
 import two from "@/../public/house14.jpeg";
-import three from "@/../public/house15.jpeg";
+import three from "@/../public/house6.jpg";
 
 const propertyData = [
   {
@@ -63,24 +63,7 @@ export default function PropertyListing() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleShare = async () => {
-    const shareData = {
-      title: property.title,
-      text: `${property.title} - ${property.price}`,
-      url: typeof window !== "undefined" ? window.location.href : "",
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch {
-        // Share cancelled or failed, do nothing
-      }
-    } else {
-      await navigator.clipboard.writeText(shareData.url);
-      alert("Link copied to clipboard!");
-    }
-  };
+ 
 
   const handleCopyPhone = async () => {
     await navigator.clipboard.writeText("+233 54 153 7940");
@@ -151,13 +134,7 @@ export default function PropertyListing() {
               >
                 <Heart size={16} fill={isLiked ? 'currentColor' : 'none'} />
               </button>
-              <button 
-                onClick={handleShare}
-                className="w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center text-gray-600 transition-all"
-                aria-label="Share property"
-              >
-                <Share2 size={16} />
-              </button>
+
             </div>
           </div>
 

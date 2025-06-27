@@ -1,3 +1,4 @@
+// src/app/search/searchResults.tsx
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
@@ -5,7 +6,8 @@ import Head from "next/head"
 import Image from "next/image"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { Search, Home, ChevronLeft, ChevronRight, X, Grid, List, SlidersHorizontal, MapPin, BathIcon, RulerIcon, InfoIcon } from "lucide-react"
-import { searchProperties, type Property, type PropertySearchParams } from "../services/propertyService"
+import { searchProperties, type PropertySearchParams } from "../services/propertyService"
+import { Property, formatPrice } from "@/lib/properties" // Updated import
 
 const hasSearchCriteria = (filters: PropertySearchParams): boolean => {
   return !!(filters.search && filters.search.trim().length > 0)
@@ -141,14 +143,7 @@ export default function SearchResults() {
     }
   }, [debouncedSearch, filters.search, filters, updateSearchParams])
 
-  // Updated price formatter to handle Ghanaian Cedis
-  const formatPrice = useCallback((price: number) => {
-    return new Intl.NumberFormat("en-GH", {
-      style: "currency",
-      currency: "GHS",
-      maximumFractionDigits: 0,
-    }).format(price)
-  }, [])
+  // Removed local formatPrice, now using imported one
 
   // Updated filter change handler with type safety
   const handleFilterChange = useCallback(
@@ -460,11 +455,16 @@ export default function SearchResults() {
                     {/* Minimal gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
 
-                    {/* Price badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="bg-white/90 px-3 py-1 rounded-xl shadow-sm text-green-700 font-bold text-base">
-                        {formatPrice(property.price)}
-                      </div>
+                    {/* Top badges */}
+                    <div className="absolute top-4 left-4 flex flex-col gap-2">
+                      <span className={`px-3 py-1 rounded-xl shadow-sm text-white font-bold text-xs ${property.listingType === 'rent' ? 'bg-blue-500' : 'bg-purple-500'}`}>
+                        For {property.listingType === 'rent' ? 'Rent' : 'Sale'}
+                      </span>
+                      {property.isNew && (
+                        <span className="px-3 py-1 rounded-xl shadow-sm text-white font-bold text-xs bg-green-500">
+                          New
+                        </span>
+                      )}
                     </div>
 
                     {/* Features in bottom right */}

@@ -1,18 +1,17 @@
 // Types for our property data
 
-import one from "../../public/house1.jpg"
-import two from "../../public/house2.jpg"
-import three from "../../public/house3.jpg"
-import four from "../../public/house4.jpg"
-import five from "../../public/house5.jpg"
-import six from "../../public/house6.jpg"
-import seven from "../../public/house7.jpg"
-import eight from "../../public/house8.jpg"
-import nine from "../../public/house9.jpg"
-import ten from "../../public/house10.jpg"
-import eleven from "../../public/house11.jpg"
-import twelve from "../../public/house12.jpg"
-
+import one from "../../public/house1.jpg";
+import two from "../../public/house2.jpg";
+import three from "../../public/house3.jpg";
+import four from "../../public/house4.jpg";
+import five from "../../public/house5.jpg";
+import six from "../../public/house6.jpg";
+import seven from "../../public/house7.jpg";
+import eight from "../../public/house8.jpg";
+import nine from "../../public/house9.jpg";
+import ten from "../../public/house10.jpg";
+import eleven from "../../public/house11.jpg";
+import twelve from "../../public/house12.jpg";
 
 export interface Property {
   isNew: string;
@@ -24,7 +23,7 @@ export interface Property {
   views: number;
   inquiries: number;
   price: number;
-  status: string; 
+  status: string;
   currency: string;
   bedrooms: number;
   bathrooms: number;
@@ -35,14 +34,15 @@ export interface Property {
   imageUrl: string;
   description: string;
   propertyType: string;
+  listingType: "rent" | "sale"; // New field to distinguish rent vs sale
 }
 
-// Mock data with real Ghana locations and realistic prices
+// Mock data with realistic Ghana rental and sale prices
 const Properties: Property[] = [
   {
     id: 1,
     title: "Modern Family House",
-    price: 450000,
+    price: 8500, // Monthly rent
     currency: "GHS",
     bedrooms: 4,
     bathrooms: 3,
@@ -59,12 +59,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Abena Realty",
     views: 115,
-    inquiries: 10
+    inquiries: 10,
+    listingType: "rent"
   },
   {
     id: 2,
     title: "Executive Villa",
-    price: 680000,
+    price: 2500000, // Sale price
     currency: "GHS",
     bedrooms: 5,
     bathrooms: 4,
@@ -81,12 +82,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Kwame Estates",
     views: 210,
-    inquiries: 17
+    inquiries: 17,
+    listingType: "sale"
   },
   {
     id: 3,
     title: "Family Residence",
-    price: 320000,
+    price: 3200, // Monthly rent
     currency: "GHS",
     bedrooms: 3,
     bathrooms: 2,
@@ -103,12 +105,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Nana Homes",
     views: 98,
-    inquiries: 6
+    inquiries: 6,
+    listingType: "rent"
   },
   {
     id: 4,
     title: "Contemporary House",
-    price: 520000,
+    price: 12000, // Monthly rent
     currency: "GHS",
     bedrooms: 4,
     bathrooms: 3,
@@ -125,12 +128,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Esi Realty",
     views: 190,
-    inquiries: 14
+    inquiries: 14,
+    listingType: "rent"
   },
   {
     id: 5,
     title: "Spacious Villa",
-    price: 750000,
+    price: 4200000, // Sale price
     currency: "GHS",
     bedrooms: 6,
     bathrooms: 5,
@@ -147,12 +151,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Legacy Properties",
     views: 232,
-    inquiries: 19
+    inquiries: 19,
+    listingType: "sale"
   },
   {
     id: 6,
     title: "Cozy Family Home",
-    price: 280000,
+    price: 2800, // Monthly rent
     currency: "GHS",
     bedrooms: 3,
     bathrooms: 2,
@@ -169,12 +174,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Mansa Realty",
     views: 87,
-    inquiries: 5
+    inquiries: 5,
+    listingType: "rent"
   },
   {
     id: 7,
     title: "Luxury Townhouse",
-    price: 580000,
+    price: 10500, // Monthly rent
     currency: "GHS",
     bedrooms: 4,
     bathrooms: 4,
@@ -191,12 +197,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Obaapa Homes",
     views: 176,
-    inquiries: 13
+    inquiries: 13,
+    listingType: "rent"
   },
   {
     id: 8,
     title: "Garden View Estate",
-    price: 390000,
+    price: 950000, // Sale price
     currency: "GHS",
     bedrooms: 3,
     bathrooms: 3,
@@ -213,12 +220,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Yaw Properties",
     views: 154,
-    inquiries: 11
+    inquiries: 11,
+    listingType: "sale"
   },
   {
     id: 9,
     title: "Executive Duplex",
-    price: 650000,
+    price: 9200, // Monthly rent
     currency: "GHS",
     bedrooms: 5,
     bathrooms: 4,
@@ -235,12 +243,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Efua Estates",
     views: 220,
-    inquiries: 18
+    inquiries: 18,
+    listingType: "rent"
   },
   {
     id: 10,
     title: "Coastal Retreat",
-    price: 420000,
+    price: 2500, // Monthly rent
     currency: "GHS",
     bedrooms: 3,
     bathrooms: 2,
@@ -257,12 +266,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Amma Homes",
     views: 142,
-    inquiries: 9
+    inquiries: 9,
+    listingType: "rent"
   },
   {
     id: 11,
     title: "Hilltop Mansion",
-    price: 980000,
+    price: 6500000, // Sale price
     currency: "GHS",
     bedrooms: 7,
     bathrooms: 6,
@@ -279,12 +289,13 @@ const Properties: Property[] = [
     status: "active",
     agent: "Elite Estates",
     views: 305,
-    inquiries: 25
+    inquiries: 25,
+    listingType: "sale"
   },
   {
     id: 12,
     title: "Urban Loft",
-    price: 350000,
+    price: 4500, // Monthly rent
     currency: "GHS",
     bedrooms: 2,
     bathrooms: 2,
@@ -301,30 +312,64 @@ const Properties: Property[] = [
     status: "active",
     agent: "Kojo Realty",
     views: 130,
-    inquiries: 8
-  }
+    inquiries: 8,
+    listingType: "rent"
+  },
 ];
-
-
-
-
 
 // Simulate API call with loading time
 export async function fetchProperties(): Promise<Property[]> {
   // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // In a real app, this would be:
   // const response = await fetch('https://api.meqasa.com/properties');
   // return response.json();
 
-  return Properties
+  return Properties;
 }
 
-// Format price in Ghana Cedis
-export function formatPrice(price: number, currency = "GHS"): string {
-  if (currency === "GHS") {
-    return `₵${price.toLocaleString()}`
+// Get property by ID
+export async function getPropertyById(id: number): Promise<Property | null> {
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  
+  const property = Properties.find(p => p.id === id);
+  return property || null;
+}
+
+// Format price based on listing type
+export function formatPrice(price: number, currency = "GHS", listingType: "rent" | "sale" = "sale"): string {
+  const formattedPrice = `₵${price.toLocaleString()}`;
+  
+  if (listingType === "rent") {
+    return `${formattedPrice}/month`;
   }
-  return `${currency} ${price.toLocaleString()}`
+  
+  return formattedPrice;
+}
+
+// Get properties by listing type
+export function getPropertiesByType(properties: Property[], type: "rent" | "sale"): Property[] {
+  return properties.filter(property => property.listingType === type);
+}
+
+// Get rent range for filtering
+export function getRentRange(): { min: number; max: number } {
+  const rentProperties = Properties.filter(p => p.listingType === "rent");
+  const prices = rentProperties.map(p => p.price);
+  return {
+    min: Math.min(...prices),
+    max: Math.max(...prices)
+  };
+}
+
+// Get sale range for filtering
+export function getSaleRange(): { min: number; max: number } {
+  const saleProperties = Properties.filter(p => p.listingType === "sale");
+  const prices = saleProperties.map(p => p.price);
+  return {
+    min: Math.min(...prices),
+    max: Math.max(...prices)
+  };
 }

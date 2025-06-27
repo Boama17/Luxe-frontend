@@ -23,6 +23,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { fetchProperties, formatPrice, Property } from "@/lib/properties"
 
 // Import Swiper styles
 import "swiper/css"
@@ -30,107 +31,8 @@ import "swiper/css/navigation"
 import "swiper/css/pagination"
 
 //images
-import one from "../../../public/house1.jpg"
-import two from "../../../public/house2.jpg"
-import three from "../../../public/house3.jpg"
-import four from "../../../public/house4.jpg"
-import five from "../../../public/house5.jpg"
-import six from "../../../public/house6.jpg"
 import Flora from "@/components/ui/flora"
 
-// Mock data for demonstration
-const mockProperties = [
-  {
-    id: 1,
-    title: "Family Residence",
-    city: "Tema",
-    location: "Tema Community 25",
-    price: 320000,
-    currency: "₵",
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 1200,
-    status: "active",    imageUrl: one.src,
-    rating: 4.8,
-    isNew: true,
-  },
-  {
-    id: 2,
-    title: "Contemporary House",
-    city: "Accra",
-    location: "Trasacco Estate",
-    price: 520000,
-    currency: "₵",
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 1800,
-    imageUrl: two.src,
-    rating: 4.9,
-    isNew: false,
-  },
-  {
-    id: 3,
-    title: "Spacious Villa",
-    city: "Accra",
-    location: "Roman Ridge",
-    price: 750000,
-    currency: "₵",
-    bedrooms: 6,
-    bathrooms: 5,
-    area: 2500,
-    imageUrl: three.src,
-    rating: 5.0,
-    isNew: true,
-  },
-  {
-    id: 4,
-    title: "Modern Apartment",
-    city: "Kumasi",
-    location: "Airport Residential",
-    price: 280000,
-    currency: "₵",
-    bedrooms: 2,
-    bathrooms: 2,
-    area: 900,
-    imageUrl: four.src,
-    rating: 4.6,
-    isNew: false,
-  },
-  {
-    id: 5,
-    title: "Luxury Penthouse",
-    city: "Accra",
-    location: "East Legon",
-    price: 950000,
-    currency: "₵",
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 2200,
-    imageUrl: five.src,
-    rating: 4.9,
-    isNew: true,
-  },
-  {
-    id: 6,
-    title: "Garden Estate Home",
-    city: "Takoradi",
-    location: "European Town",
-    price: 420000,
-    currency: "₵",
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 1600,
-    imageUrl: six.src,
-    rating: 4.7,
-    isNew: false,
-  },
-]
-
-type Property = (typeof mockProperties)[0]
-
-const formatPrice = (price: number, currency: string) => {
-  return `${currency}${price.toLocaleString()}`
-}
 
 export default function PropertyListing() {
   const [properties, setProperties] = useState<Property[]>([])
@@ -144,8 +46,8 @@ export default function PropertyListing() {
     const loadProperties = async () => {
       try {
         // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        setProperties(mockProperties)
+        const fetchedProperties = await fetchProperties();
+        setProperties(fetchedProperties);
       } catch (err) {
         setError("Failed to load properties. Please try again later.")
         console.error("Fetch error:", err)
@@ -227,12 +129,17 @@ export default function PropertyListing() {
 
             {/* Top badges and buttons */}
             <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-              {/* New badge */}
-              {property.isNew && (
-                <Badge className="bg-green-500 hover:bg-green-600 text-white border-0 px-3 py-1 text-xs font-medium">
-                  New
+              {/* Listing type and New badges */}
+              <div className="flex flex-col gap-2">
+                <Badge className={`${property.listingType === 'rent' ? 'bg-blue-500 hover:bg-blue-600' : 'bg-purple-500 hover:bg-purple-600'} text-white border-0 px-3 py-1 text-xs font-medium`}>
+                  For {property.listingType === 'rent' ? 'Rent' : 'Sale'}
                 </Badge>
-              )}
+                {property.isNew && (
+                  <Badge className="bg-green-500 hover:bg-green-600 text-white border-0 px-3 py-1 text-xs font-medium">
+                    New
+                  </Badge>
+                )}
+              </div>
 
               {/* Favorite button */}
               <Button
@@ -255,7 +162,9 @@ export default function PropertyListing() {
             {/* Price badge */}
             <div className="absolute top-4 right-4">
               <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm">
-                <span className="font-bold text-green-600 text-lg">{formatPrice(property.price, property.currency)}</span>
+                <span className="font-bold text-green-600 text-lg">
+                  {formatPrice(property.price, property.currency, property.listingType)}
+                </span>
               </div>
             </div>
 
