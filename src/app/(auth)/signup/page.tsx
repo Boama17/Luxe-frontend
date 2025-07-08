@@ -145,7 +145,7 @@ export default function SignupPage() {
     if (!/(?=.*[a-z])/.test(password)) return "Password must contain at least one lowercase letter";
     if (!/(?=.*[A-Z])/.test(password)) return "Password must contain at least one uppercase letter";
     if (!/(?=.*\d)/.test(password)) return "Password must contain at least one number";
-    if (!/(?=.*[@$!%*?&])/.test(password)) return "Password must contain at least one special character";
+    if (!/(?=.*[@$!%*?&_])/.test(password)) return "Password must contain at least one special character";
     return null;
   };
 
@@ -257,63 +257,38 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateStep(currentStep)) return;
-    
+
     setIsLoading(true);
     setSubmitError('');
     setShowSuccess(false);
-    
+
     try {
-      // Create user account with Firebase Auth
-      // Uncomment and modify based on your auth service implementation
-      
-      const _userCredential = await authService.registerWithEmail(
+      // Register user with Firebase Auth
+      const result = await authService.registerWithEmail(
         formData.email,
         formData.password,
         formData.firstName,
         formData.lastName
       );
-      
-      
-      // Simulate API call for demonstration
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      console.log("User registered successfully:", formData);
-      setShowSuccess(true);
-      
-      // Optional: Send verification email
-      // await authService.sendEmailVerification();
-      
-      // Redirect after short delay to show success message
-      setTimeout(() => {
-          router.push('/admin'); // Uncomment when you have router
-        console.log("Redirecting to admin...");
-      }, 2000);
-      
-    } catch (error: string | any) {
-      console.error("Registration error:", error);
-      let errorMessage = 'Registration failed. Please try again.';
-      
-      // Handle specific Firebase Auth errors
-      if (error.code) {
-        switch (error.code) {
-          case 'auth/email-already-in-use':
-            errorMessage = 'An account with this email already exists.';
-            break;
-          case 'auth/weak-password':
-            errorMessage = 'Password is too weak. Please choose a stronger password.';
-            break;
-          case 'auth/invalid-email':
-            errorMessage = 'Please enter a valid email address.';
-            break;
-          case 'auth/network-request-failed':
-            errorMessage = 'Network error. Please check your connection and try again.';
-            break;
-          default:
-            errorMessage = error.message || errorMessage;
-        }
+
+      if (result.success && result.user) {
+        // Send email verification
+        await authService.sendEmailVerification(result.user);
+
+        // Sign out the user so they can't access the app until verified
+        await authService.signOut();
+
+        setShowSuccess(true);
+
+        // Redirect to sign in after a short delay
+        setTimeout(() => {
+          router.push('/signin');
+        }, 2500);
+      } else {
+        setSubmitError(result.error || "Registration failed. Please try again.");
       }
-      
-      setSubmitError(errorMessage);
+    } catch (error: any) {
+      setSubmitError(error.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -650,7 +625,9 @@ export default function SignupPage() {
                   {/* Success message display */}
                   {showSuccess && (
                     <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <p className="text-green-600 text-sm">Registration successful! Redirecting...</p>
+                      <p className="text-green-600 text-sm">
+                        Registration successful! Please check your email to verify your account. Redirecting to sign in...
+                      </p>
                     </div>
                   )}
 

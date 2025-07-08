@@ -1,10 +1,11 @@
+// src/app/property/[id]/page.tsx
 "use client"
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight, Heart, MapPin, BedDouble, Bath, Ruler, Star, Loader2 } from "lucide-react"
-import { getPropertyById, Property } from "@/app/services/propertyService"
+import { getPropertyById, Property, formatPrice } from "@/lib/properties"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
@@ -61,7 +62,9 @@ export default function PropertyDetailPage() {
       <nav className="mb-6 text-sm text-gray-500 flex items-center gap-2">
         <span className="cursor-pointer hover:underline" onClick={() => router.push("/")}>Home</span>
         <span>›</span>
-        <span className="cursor-pointer hover:underline" onClick={() => router.push("/search")}>For Sale</span>
+        <span className="cursor-pointer hover:underline" onClick={() => router.push("/search")}>
+          For {property.listingType === 'rent' ? 'Rent' : 'Sale'}
+        </span>
         <span>›</span>
         <span className="cursor-pointer hover:underline">{property.city}</span>
         <span>›</span>
@@ -75,11 +78,16 @@ export default function PropertyDetailPage() {
           <div className="flex items-center gap-2 text-gray-600">
             <MapPin className="w-4 h-4" />
             <span>{property.location}</span>
+            <Badge className={`ml-2 ${property.listingType === 'rent' ? 'bg-blue-500' : 'bg-purple-500'} text-white`}>
+              For {property.listingType === 'rent' ? 'Rent' : 'Sale'}
+            </Badge>
             <Badge className="ml-2 bg-green-500 text-white">{property.isNew ? "New" : "Featured"}</Badge>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-2xl font-bold text-green-700">{property.currency}{property.price.toLocaleString()}</span>
+          <span className="text-2xl font-bold text-green-700">
+            {formatPrice(property.price, property.currency, property.listingType)}
+          </span>
           <Button
             variant="ghost"
             size="icon"
@@ -162,6 +170,7 @@ export default function PropertyDetailPage() {
       {/* Description & Features */}
       <div className="bg-white rounded-2xl shadow p-6 mb-8">
         <h2 className="text-xl font-semibold mb-4">Property Details</h2>
+        <p className="text-gray-700 mb-4">{property.description}</p>
         <ul className="list-disc pl-6 text-gray-700 space-y-1 mb-4">
           <li>All rooms en-suite with visitors washroom</li>
           <li>Serene and secured environment</li>
@@ -173,26 +182,43 @@ export default function PropertyDetailPage() {
           <li>Security</li>
         </ul>
         <div className="text-gray-600">
-          Executive {property.bedrooms} bedroom self compound for rent at {property.location}. Security, reservoir, good road network, self meter.
+          Executive {property.bedrooms} bedroom {property.propertyType.toLowerCase()} for {property.listingType} at {property.location}. Security, reservoir, good road network, self meter.
         </div>
       </div>
 
-      {/* Categories & Lease Info */}
+      {/* Categories & Pricing Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div>
           <h3 className="font-semibold mb-2">Categories</h3>
           <div className="flex flex-wrap gap-2">
-            <Badge>House for Rent</Badge>
-            <Badge>House for Rent in {property.location}</Badge>
-            <Badge>{property.bedrooms}-bedroom House for Rent</Badge>
+            <Badge>{property.propertyType} for {property.listingType === 'rent' ? 'Rent' : 'Sale'}</Badge>
+            <Badge>{property.propertyType} for {property.listingType === 'rent' ? 'Rent' : 'Sale'} in {property.location}</Badge>
+            <Badge>{property.bedrooms}-bedroom {property.propertyType} for {property.listingType === 'rent' ? 'Rent' : 'Sale'}</Badge>
           </div>
         </div>
         <div>
-          <h3 className="font-semibold mb-2">Lease Options</h3>
-          <div className="text-gray-700">12 months @ <span className="font-bold">{property.currency}{property.price.toLocaleString()}</span>/month</div>
-          <div className="text-gray-500">Negotiable</div>
-          <div className="text-gray-500">Commission: 10%</div>
-          <div className="text-gray-500">Registration fee: GH₵ 200</div>
+          <h3 className="font-semibold mb-2">
+            {property.listingType === 'rent' ? 'Lease Options' : 'Sale Information'}
+          </h3>
+          {property.listingType === 'rent' ? (
+            <>
+              <div className="text-gray-700">
+                12 months @ <span className="font-bold">{formatPrice(property.price, property.currency, property.listingType)}</span>
+              </div>
+              <div className="text-gray-500">Negotiable</div>
+              <div className="text-gray-500">Commission: 10%</div>
+              <div className="text-gray-500">Registration fee: GH₵ 200</div>
+            </>
+          ) : (
+            <>
+              <div className="text-gray-700">
+                Sale Price: <span className="font-bold">{formatPrice(property.price, property.currency, property.listingType)}</span>
+              </div>
+              <div className="text-gray-500">Price negotiable</div>
+              <div className="text-gray-500">Legal fees: 2% of sale price</div>
+              <div className="text-gray-500">Agent commission: 5%</div>
+            </>
+          )}
         </div>
       </div>
 
@@ -201,6 +227,7 @@ export default function PropertyDetailPage() {
         <div>
           <div className="font-semibold text-gray-900 mb-1">Call Or WhatsApp Now for a swift response</div>
           <div className="text-lg font-bold text-green-700">05917*****/05534*****</div>
+          <div className="text-sm text-gray-600 mt-1">Agent: {property.agent}</div>
         </div>
         <Button className="bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-xl text-lg font-semibold">
           Contact Agent

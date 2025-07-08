@@ -11,7 +11,7 @@ interface StatCardProps {
 
 export default function StatCard({ title, value, change, icon: Icon, color, bg }: StatCardProps) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-xl min-w-[20rem] md:min-w-[18rem] place-self-center p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-4">
         <div className={`p-3 rounded-lg ${bg}`}>
           <Icon className={`w-6 h-6 ${color}`} />
