@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { X, Save } from "lucide-react";
 import React from "react";
 
