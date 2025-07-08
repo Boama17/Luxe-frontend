@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 //sign-up
 "use client"
@@ -282,8 +281,8 @@ export default function SignupPage() {
 
         // Redirect to sign in after a short delay
         setTimeout(() => {
-          router.push('/signin');
-        }, 2500);
+          router.push('/verify-email');
+        }, 1500);
       } else {
         setSubmitError(result.error || "Registration failed. Please try again.");
       }
