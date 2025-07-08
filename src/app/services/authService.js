@@ -16,7 +16,8 @@ import {
   signInWithPhoneNumber,
   browserLocalPersistence,
   setPersistence,
-  browserPopupRedirectResolver
+  browserPopupRedirectResolver,
+  sendEmailVerification
 } from "firebase/auth";
 import { auth } from "./firebase";
 
@@ -268,6 +269,13 @@ export const authService = {
         success: false,
         error: this.getErrorMessage(error.code)
       };
+    }
+  },
+
+  // Email Verification
+  async sendEmailVerification(user) {
+    if (user) {
+      await sendEmailVerification(user); // This is the Firebase function
     }
   },
 
