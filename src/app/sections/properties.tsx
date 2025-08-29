@@ -30,7 +30,7 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 
-//images
+//spinning flower
 import Flora from "@/components/ui/flora"
 
 
@@ -96,7 +96,7 @@ export default function PropertyListing() {
     </div>
   )
 
-  // Enhanced property card component
+  // property card component
   const PropertyCard = ({
     property,
     index = 0,
@@ -246,7 +246,7 @@ export default function PropertyListing() {
   }
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-16">
+    <section className="max-w-7xl mx-auto px-6 py-16" id="featured-properties">
       <Header />
 
       {/* Featured properties carousel */}

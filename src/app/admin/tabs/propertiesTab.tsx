@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { useEffect, useState } from 'react';
 import PropertyCard from "../components/PropertyCard";
 import { Plus, Search } from "lucide-react";
+import { fetchProperties, subscribeToPropertyUpdates } from "@/lib/properties";
 
 export default function PropertiesTab({
   filteredProperties,
@@ -18,6 +20,34 @@ export default function PropertiesTab({
   setFilterStatus: (v: string) => void;
   setShowPropertyModal: (show: boolean) => void;
 }) {
+  const [localProperties, setLocalProperties] = useState(filteredProperties);
+
+  useEffect(() => {
+    // Update local properties when filtered properties change
+    setLocalProperties(filteredProperties);
+  }, [filteredProperties]);
+
+  useEffect(() => {
+    // Subscribe to property updates
+    const unsubscribe = subscribeToPropertyUpdates(() => {
+      // Refresh properties when updates occur
+      fetchProperties().then(updatedProperties => {
+        // Apply current filters to the updated properties
+        const filtered = updatedProperties.filter(property => {
+          const matchesSearch = !searchTerm || 
+            property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            property.location.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesStatus = filterStatus === 'all' || property.status === filterStatus;
+          return matchesSearch && matchesStatus;
+        });
+        setLocalProperties(filtered);
+      });
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [searchTerm, filterStatus]); // Re-subscribe when filters change
+
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Header */}
@@ -60,7 +90,7 @@ export default function PropertiesTab({
       </div>
       {/* Properties Grid */}
       <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {filteredProperties.map(property => (
+        {localProperties.map(property => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>

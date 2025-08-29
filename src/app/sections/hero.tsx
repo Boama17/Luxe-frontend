@@ -1,11 +1,21 @@
+"use client"
 import Image from 'next/image';
 import one from '../../assets/img/near.png';
 import two from '../../assets/img/second.png';
 import three from '../../assets/img/three.jpg';
 import Flora from '@/components/ui/flora';
 
-
 export default function Hero() {
+    const scrollToProperties = () => {
+        const featuredSection = document.getElementById('featured-properties');
+        if (featuredSection) {
+            featuredSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
+
     return (
         <div className="content mx-4 md:ml-16 pt-8 md:pt-0">
             <div className="max-w-[37rem] mt-8 md:mt-[2rem]">
@@ -25,7 +35,10 @@ export default function Hero() {
                 </span>
             </div>
             <div className="buttons mt-16 md:mt-4 flex max-w-min group">
-                <div className="list w-max px-14 sm:px-8 py-4 md:-my-[-1.75rem] md:px-12 bg-black text-sm sm:text-sm text-white hover:bg-white hover:text-black rounded-full cursor-pointer transition-colors duration-300">
+                <div 
+                    onClick={scrollToProperties}
+                    className="list w-max px-14 sm:px-8 py-4 md:-my-[-1.75rem] md:px-12 bg-black text-sm sm:text-sm text-white hover:bg-white hover:text-black rounded-full cursor-pointer transition-colors duration-300"
+                >
                     View Listings
                 </div>
                 <div className="circle p-3 sm:p-4 md:p-5 rounded-full bg-black group-hover:bg-white transition-all duration-500 delay-700 size-10 sm:size-10 md:size-12 mt-2 md:mt-8 ml-2 md:ml-3 cursor-pointer">

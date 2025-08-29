@@ -317,6 +317,70 @@ const Properties: Property[] = [
   },
 ];
 
+// Create a simple event system for property updates
+type PropertyUpdateListener = () => void;
+const propertyUpdateListeners: PropertyUpdateListener[] = [];
+
+// Add a listener for property updates
+export function subscribeToPropertyUpdates(listener: PropertyUpdateListener) {
+  propertyUpdateListeners.push(listener);
+  return () => {
+    const index = propertyUpdateListeners.indexOf(listener);
+    if (index > -1) {
+      propertyUpdateListeners.splice(index, 1);
+    }
+  };
+}
+
+// Notify all listeners of updates
+function notifyPropertyUpdate() {
+  propertyUpdateListeners.forEach(listener => listener());
+}
+
+// Add a new property
+export async function addProperty(property: Omit<Property, 'id'>): Promise<Property> {
+  const newId = Math.max(...Properties.map(p => p.id)) + 1;
+  const newProperty = { ...property, id: newId };
+  Properties.unshift(newProperty);
+  
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  
+  notifyPropertyUpdate();
+  return newProperty;
+}
+
+// Update an existing property
+export async function updateProperty(property: Property): Promise<Property> {
+  const index = Properties.findIndex(p => p.id === property.id);
+  if (index === -1) {
+    throw new Error('Property not found');
+  }
+  
+  Properties[index] = property;
+  
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  
+  notifyPropertyUpdate();
+  return property;
+}
+
+// Delete a property
+export async function deleteProperty(id: number): Promise<void> {
+  const index = Properties.findIndex(p => p.id === id);
+  if (index === -1) {
+    throw new Error('Property not found');
+  }
+  
+  Properties.splice(index, 1);
+  
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  
+  notifyPropertyUpdate();
+}
+
 // Simulate API call with loading time
 export async function fetchProperties(): Promise<Property[]> {
   // Simulate network delay

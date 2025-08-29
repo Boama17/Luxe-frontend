@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { useEffect, useState } from 'react';
 import StatCard from "../components/StatCard";
 import PropertyCard from "../components/PropertyCard";
 import { Plus, UserCheck, MessageCircle } from "lucide-react";
+import { fetchProperties, subscribeToPropertyUpdates } from "@/lib/properties";
 
 export default function DashboardTab({
   statCards,
@@ -15,6 +17,21 @@ export default function DashboardTab({
   setShowPropertyModal: (show: boolean) => void;
   setActiveTab: (tab: string) => void;
 }) {
+  const [localProperties, setLocalProperties] = useState(properties);
+
+  useEffect(() => {
+    // Subscribe to property updates
+    const unsubscribe = subscribeToPropertyUpdates(() => {
+      // Refresh properties when updates occur
+      fetchProperties().then(updatedProperties => {
+        setLocalProperties(updatedProperties);
+      });
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="space-y-8">
       {/* Stats Grid */}
@@ -29,12 +46,13 @@ export default function DashboardTab({
           <div className="bg-white/90 rounded-2xl shadow border border-emerald-100 p-8">
             <h3 className="text-lg font-semibold text-emerald-900 mb-4">Recent Properties</h3>
             <div className="space-y-4">
-              {properties.slice(0, 3).map((property) => (
+              {localProperties.slice(0, 3).map((property) => (
                 <PropertyCard key={property.id} property={property} />
               ))}
             </div>
           </div>
         </div>
+        {/* Rest of the component remains the same */}
         <div>
           <div className="bg-white/90 rounded-2xl shadow border border-emerald-100 p-4 md:p-6 lg:p-4">
             <h3 className="text-lg font-semibold text-emerald-900 mb-4">Quick Actions</h3>
