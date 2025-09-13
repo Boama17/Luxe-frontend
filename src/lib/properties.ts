@@ -435,7 +435,7 @@ const Properties: Property[] = [
   city: "Accra",
   region: "Greater Accra",
   imageUrl: ten.src,
-  interiorImages: [ten.src, ten1.src, ten2.src, ten3.src, ten4.src, ten5.src, ten6.src],
+  interiorImages: [ten.src, ten1.src, ten2.src, ten3.src, ten4.src, ten5.src, ten6.src, ten7.src, ten8.src, ten9.src, ten10.src, ten11.src],
   description:
     "Discover the epitome of contemporary living in the heart of Ogbojo, Accra, with our exquisite 2 and 3-bedroom townhouses. Nestled in a serene neighborhood, these thoughtfully designed homes offer a perfect blend of comfort, style, and convenience. Features include ensuite bedrooms, fully equipped modern kitchens, open-concept living spaces, private balconies, communal gardens, and 24/7 security. Conveniently located with easy access to schools, shopping centers, and major routes.",
   propertyType: "Townhouse",
