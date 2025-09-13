@@ -1,3 +1,4 @@
+import { Link } from 'lucide-react';
 import React from 'react'
 
 interface FooterProps {
@@ -43,9 +44,9 @@ function Footer({ background = 'bg-white' }: FooterProps) {
               © {new Date().getFullYear()} LuxeRealty. All rights reserved.
             </div>
             <div className="mt-4 md:mt-0 flex space-x-6">
-              <a href="#" className="text-sm text-gray-500 hover:text-emerald-800">Privacy Policy</a>
-              <a href="#" className="text-sm text-gray-500 hover:text-emerald-800">Terms of Service</a>
-              <a href="#" className="text-sm text-gray-500 hover:text-emerald-800">Contact Us</a>
+              <Link href="/privacy-policy" className="text-sm text-gray-500 hover:text-emerald-800">Privacy Policy</Link>
+              <Link href="/terms-of-service" className="text-sm text-gray-500 hover:text-emerald-800">Terms of Service</Link>
+              <Link href="#" className="text-sm text-gray-500 hover:text-emerald-800">Contact Us</Link>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import six from "@/../public/house6.jpg";
 import seven from "@/../public/house7.jpg";
 import eight from "@/../public/house8.jpg";
 import nine from "@/../public/house9.jpeg"
+import ten from "@/../public/house10.jpeg"
 // Import interior images for each property
 import one1 from "@/../public/one/01.jpg";
 import one2 from "@/../public/one/02.jpg";
@@ -62,6 +63,20 @@ import nine4 from "@/../public/nine/04.jpeg";
 import nine5 from "@/../public/nine/05.jpeg";
 import nine6 from "@/../public/nine/06.jpeg";
 import nine7 from "@/../public/nine/07.jpeg";
+
+import ten1 from "@/../public/ten/01.jpeg"
+import ten2 from "@/../public/ten/02.jpeg"
+import ten3 from "@/../public/ten/03.jpeg"
+import ten4 from "@/../public/ten/04.jpeg"
+import ten5 from "@/../public/ten/05.jpeg"
+import ten6 from "@/../public/ten/06.jpeg"
+import ten7 from "@/../public/ten/07.jpeg"
+import ten8 from "@/../public/ten/08.jpeg"
+import ten9 from "@/../public/ten/09.jpeg"
+import ten10 from "@/../public/ten/10.jpeg"
+import ten11 from "@/../public/ten/11.jpeg"
+
+
 
 // Property categories enum for easy expansion
 export enum PropertyCategory {
@@ -408,6 +423,33 @@ const Properties: Property[] = [
     listingType: "sale",
     category: PropertyCategory.RESIDENTIAL
   },
+  {
+  id: 10,
+  title: "Avant-Garde 2 & 3 Bedroom Townhouses Ogbojo",
+  price: 120000,
+  currency: "USD",
+  bedrooms: 3,
+  bathrooms: 3,
+  area: 2800,
+  location: "Ogbojo",
+  city: "Accra",
+  region: "Greater Accra",
+  imageUrl: ten.src,
+  interiorImages: [ten.src, ten1.src, ten2.src, ten3.src, ten4.src, ten5.src, ten6.src],
+  description:
+    "Discover the epitome of contemporary living in the heart of Ogbojo, Accra, with our exquisite 2 and 3-bedroom townhouses. Nestled in a serene neighborhood, these thoughtfully designed homes offer a perfect blend of comfort, style, and convenience. Features include ensuite bedrooms, fully equipped modern kitchens, open-concept living spaces, private balconies, communal gardens, and 24/7 security. Conveniently located with easy access to schools, shopping centers, and major routes.",
+  propertyType: "Townhouse",
+  address: "East Legon, Ogbojo, Accra, Greater Accra",
+  rating: 4.9,
+  isNew: "Featured",
+  status: "active",
+  agent: "Luxe Realty",
+  views: 132,
+  inquiries: 16,
+  listingType: "sale",
+  category: PropertyCategory.LUXURY
+}
+
 ];
 
 // Auto-categorize existing properties if category is not set
@@ -792,7 +834,50 @@ export const PropertyListings: PropertyListing[] = [
       agentCommission: 10,
       registrationFee: 200
     }
+  },
+  {
+  id: 10,
+  title: "Avant-Garde Townhouses - Ogbojo",
+  shortDescription: "Exquisite 2 & 3-bedroom townhouses in Ogbojo with modern design and premium amenities",
+  features: [
+    "Choice of 2 or 3 spacious bedrooms",
+    "Contemporary bathrooms with modern fixtures",
+    "Fully equipped modern kitchen",
+    "Open-concept living and dining areas",
+    "Private balconies",
+    "Communal garden space"
+  ],
+  amenities: [
+    "Dedicated parking spaces",
+    "24/7 security surveillance",
+    "Serene landscaped surroundings",
+    "Modern kitchen appliances",
+    "Private outdoor space",
+    "Balcony access"
+  ],
+  nearbyPlaces: [
+    "East Legon schools",
+    "Shopping centers",
+    "Recreational facilities",
+    "Health facilities",
+    "Transport routes",
+    "Ogbojo community"
+  ],
+  propertyDetails: {
+    yearBuilt: 2024,
+    parking: 2,
+    furnishing: "Semi-Furnished",
+    petPolicy: "Allowed",
+    utilities: ["Water supply", "Electricity", "Security services"],
+    securityFeatures: ["24/7 CCTV surveillance", "Estate security", "Gated community"]
+  },
+  financialDetails: {
+    securityDeposit: 12000,
+    agentCommission: 8,
+    registrationFee: 300
   }
+}
+
 ];
 
 // Utility functions
