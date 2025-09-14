@@ -9,6 +9,10 @@ import seven from "@/../public/house7.jpg";
 import eight from "@/../public/house8.jpg";
 import nine from "@/../public/house9.jpeg"
 import ten from "@/../public/house10.jpeg"
+import eleven from "@/../public/house11.jpeg"
+import twelve from "@/../public/house12.jpeg"
+import thirteen from "@/../public/house13.jpeg"
+
 // Import interior images for each property
 import one1 from "@/../public/one/01.jpg";
 import one2 from "@/../public/one/02.jpg";
@@ -75,6 +79,46 @@ import ten8 from "@/../public/ten/08.jpeg"
 import ten9 from "@/../public/ten/09.jpeg"
 import ten10 from "@/../public/ten/10.jpeg"
 import ten11 from "@/../public/ten/11.jpeg"
+
+import eleven1 from "@/../public/eleven/01.jpeg"
+import eleven2 from "@/../public/eleven/02.jpeg"
+import eleven3 from "@/../public/eleven/03.jpeg"
+import eleven4 from "@/../public/eleven/04.jpeg"
+import eleven5 from "@/../public/eleven/05.jpeg"
+import eleven6 from "@/../public/eleven/06.jpeg"
+import eleven7 from "@/../public/eleven/07.jpeg"
+import eleven8 from "@/../public/eleven/08.jpeg"
+import eleven9 from "@/../public/eleven/09.jpeg"
+import eleven10 from "@/../public/eleven/10.jpeg"
+import eleven11 from "@/../public/eleven/11.jpeg"
+
+import twelve1 from "@/../public/twelve/01.jpeg"
+import twelve2 from "@/../public/twelve/02.jpeg"
+import twelve3 from "@/../public/twelve/03.jpeg"
+import twelve4 from "@/../public/twelve/04.jpeg"
+import twelve5 from "@/../public/twelve/05.jpeg"
+import twelve6 from "@/../public/twelve/06.jpeg"
+import twelve7 from "@/../public/twelve/07.jpeg"
+import twelve8 from "@/../public/twelve/08.jpeg"
+import twelve9 from "@/../public/twelve/09.jpeg"
+import twelve10 from "@/../public/twelve/10.jpeg"
+import twelve11 from "@/../public/twelve/11.jpeg"
+import twelve12 from "@/../public/twelve/12.jpeg"
+import twelve13 from "@/../public/twelve/13.jpeg"
+import twelve14 from "@/../public/twelve/14.jpeg"
+
+import thirteen1 from "@/../public/thirteen/1.jpeg"
+import thirteen2 from "@/../public/thirteen/2.jpeg"
+import thirteen3 from "@/../public/thirteen/3.jpeg"
+import thirteen4 from "@/../public/thirteen/4.jpeg"
+import thirteen5 from "@/../public/thirteen/5.jpeg"
+import thirteen6 from "@/../public/thirteen/6.jpeg"
+import thirteen7 from "@/../public/thirteen/7.jpeg"
+import thirteen8 from "@/../public/thirteen/8.jpeg"
+import thirteen9 from "@/../public/thirteen/9.jpeg"
+import thirteen10 from "@/../public/thirteen/10.jpeg"
+import thirteen11 from "@/../public/thirteen/11.jpeg"
+import thirteen12 from "@/../public/thirteen/12.jpeg"
 
 
 
@@ -448,7 +492,82 @@ const Properties: Property[] = [
   inquiries: 16,
   listingType: "sale",
   category: PropertyCategory.LUXURY
-}
+},
+{
+    id: 11,
+    title: "6 Room Office For Rent East Legon",
+    price: 3000,
+    currency: "USD",
+    bedrooms: 6,
+    bathrooms: 5,
+    area: 4000,
+    location: "East Legon",
+    city: "Accra",
+    region: "Greater Accra",
+    imageUrl: eleven1.src,
+    interiorImages: [eleven1.src, eleven2.src, eleven3.src, eleven4.src, eleven5.src, eleven6.src, eleven7.src, eleven8.src, eleven9.src, eleven10.src, eleven11.src],
+    description: "Six (6) room office facility (all ensuite) on a strategic location to let at East Legon near MTN office. Each room has A/c and wardrobe. The house has partly furnished kitchen, automated garage, polytanks for water storage, etc. The area has uninterrupted water flow and it is renting for Ghana Cedi equivalent of US$ 3,000 per month (negotiable).",
+    propertyType: "Office",
+    address: "East Legon, near MTN office, Accra, Greater Accra",
+    rating: 4.8,
+    isNew: "Featured",
+    status: "active",
+    agent: "Avenue Ghana",
+    views: 300,
+    inquiries: 25,
+    listingType: "rent",
+    category: PropertyCategory.COMMERCIAL
+},
+{
+    id: 12,
+    title: "Executive Office Facility Labone",
+    price: 15500,
+    currency: "USD",
+    bedrooms: 15,
+    bathrooms: 8,
+    area: 8342,
+    location: "Labone",
+    city: "Accra",
+    region: "Greater Accra",
+    imageUrl: twelve1.src,
+    interiorImages: [twelve1.src, twelve2.src, twelve3.src, twelve4.src, twelve5.src, twelve6.src, twelve7.src, twelve8.src, twelve9.src, twelve10.src, twelve11.src, twelve12.src, twelve13.src, twelve14.src],
+    description: "An executive office facility (self compound) to let at Labone near Labone Ecobank. The property has a large car parking area, provision for Air-conditioners, internet connection in each floor, etc. The floors are well partitioned into individual and conference rooms, it has server room, kitchenettes, etc. It also has uninterrupted water flow with standby reservoirs, security post, etc. It has a total space of 775sqm and it is renting for Ghana Cedi equivalent of US$20 per square meter / month (negotiable).",
+    propertyType: "Office",
+    address: "Labone, near Labone Ecobank, Accra, Greater Accra",
+    rating: 4.9,
+    isNew: "Featured",
+    status: "active",
+    agent: "Avenue Ghana",
+    views: 450,
+    inquiries: 40,
+    listingType: "rent",
+    category: PropertyCategory.COMMERCIAL
+},
+{
+    id: 13,
+    title: "Executive Office Facility Cantonments",
+    price: 42000,
+    currency: "GHS",
+    bedrooms: 0,
+    bathrooms: 10,
+    area: 4327,
+    location: "Cantonments",
+    city: "Accra",
+    region: "Greater Accra",
+    imageUrl: thirteen1.src,
+    interiorImages: [thirteen1.src, thirteen2.src, thirteen4.src, thirteen5.src, thirteen6.src, thirteen7.src, thirteen8.src, thirteen9.src, thirteen10.src, thirteen11.src, thirteen12.src],
+    description: "An executive office facility with a large and well demarcated car parking space for rent in Cantonments. The facility has central A/c, high speed internet facilities, etc. In addition, it has enough washrooms, 24/7 management team in place, security, uninterrupted water flow with a large water storage facility and a standby plant for backup power. It has 402 sqm per floor and renting for Forty Two Thousand Ghana Cedi (Ghc42,000) per month (negotiable). The amount is inclusive of service charge.",
+    propertyType: "Office",
+    address: "Cantonments, Accra, Greater Accra",
+    rating: 4.9,
+    isNew: "New",
+    status: "active",
+    agent: "Avenue Ghana",
+    views: 500,
+    inquiries: 50,
+    listingType: "rent",
+    category: PropertyCategory.COMMERCIAL
+},
 
 ];
 
@@ -875,6 +994,126 @@ export const PropertyListings: PropertyListing[] = [
     securityDeposit: 12000,
     agentCommission: 8,
     registrationFee: 300
+  }
+},
+{
+  id: 11,
+  title: "6 Room Office for Rent - East Legon",
+  shortDescription: "Six (6) room office facility (all ensuite) on a strategic location to let at East Legon near MTN office.",
+  features: [
+    "6 ensuite rooms",
+    "Partly furnished kitchen",
+    "Automated garage",
+    "Polytanks for water storage",
+    "Air conditioning in each room",
+    "Wardrobe in each room"
+  ],
+  amenities: [
+    "Air conditioning",
+    "Balcony",
+    "Generator/Power Backup",
+    "Internet/DSTV",
+    "Kitchen"
+  ],
+  nearbyPlaces: [
+    "MTN office",
+    "East Legon business district",
+    "Restaurants and cafes",
+    "Banks and ATMs",
+    "Major transport routes"
+  ],
+  propertyDetails: {
+    yearBuilt: 2022,
+    parking: 4,
+    furnishing: "Semi-Furnished",
+    petPolicy: "Not Allowed",
+    utilities: ["Uninterrupted water flow", "Standby generator"],
+    securityFeatures: ["Automated garage", "Secure compound"]
+  },
+  financialDetails: {
+    securityDeposit: 3000,
+    agentCommission: 10,
+    registrationFee: 200
+  }
+},
+{
+  id: 12,
+  title: "Executive Office Facility - Labone",
+  shortDescription: "An executive office facility (self compound) to let at Labone near Labone Ecobank.",
+  features: [
+    "Large car parking area",
+    "Provision for Air-conditioners",
+    "Internet connection on each floor",
+    "Partitioned into individual and conference rooms",
+    "Server room",
+    "Kitchenettes"
+  ],
+  amenities: [
+    "Air conditioning",
+    "Balcony",
+    "Generator/Power Backup",
+    "Internet/DSTV",
+    "Kitchen"
+  ],
+  nearbyPlaces: [
+    "Labone Ecobank",
+    "Labone business district",
+    "Restaurants and cafes",
+    "Embassies",
+    "Major transport routes"
+  ],
+  propertyDetails: {
+    yearBuilt: 2021,
+    parking: 19,
+    furnishing: "Unfurnished",
+    petPolicy: "Not Allowed",
+    utilities: ["Uninterrupted water flow", "Standby reservoirs"],
+    securityFeatures: ["Security post", "Secure compound"]
+  },
+  financialDetails: {
+    securityDeposit: 20,
+    agentCommission: 10,
+    registrationFee: 200
+  }
+},
+{
+  id: 13,
+  title: "Executive Office Facility - Cantonments",
+  shortDescription: "An executive office facility with a large and well demarcated car parking space for rent in Cantonments.",
+  features: [
+    "Central A/c",
+    "High speed internet facilities",
+    "Enough washrooms",
+    "24/7 management team",
+    "Standby plant for backup power",
+    "Large water storage facility"
+  ],
+  amenities: [
+    "Air conditioning",
+    "Generator/Power Backup",
+    "Internet/DSTV",
+    "Kitchen"
+  ],
+  nearbyPlaces: [
+    "Cantonments business district",
+    "Embassies",
+    "Restaurants and cafes",
+    "International schools",
+    "Major transport routes"
+  ],
+  propertyDetails: {
+    yearBuilt: 2020,
+    parking: 10,
+    furnishing: "Unfurnished",
+    petPolicy: "Not Allowed",
+    utilities: ["Uninterrupted water flow", "Standby power"],
+    securityFeatures: ["24/7 security", "On-site management"]
+  },
+  financialDetails: {
+    securityDeposit: 42000,
+    agentCommission: 10,
+    registrationFee: 200,
+    serviceCharge: 0
   }
 }
 

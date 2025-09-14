@@ -1,4 +1,5 @@
 import { Property as LibProperty, fetchProperties } from "@/lib/properties";
+import { Property as PropertyType } from '@/types/agent'
 
 export type Property = LibProperty;
 
@@ -83,4 +84,43 @@ export async function searchProperties(params: PropertySearchParams): Promise<Pr
 export async function getPropertyById(id: number): Promise<Property | undefined> {
   const allProperties = await fetchProperties();
   return allProperties.find((p) => p.id === id);
+}
+
+const isBrowser = () => typeof window !== 'undefined'
+
+const getProperties = (): PropertyType[] => {
+  if (!isBrowser()) return []
+  const propertiesJson = localStorage.getItem('properties')
+  return propertiesJson ? JSON.parse(propertiesJson) : []
+}
+
+const saveProperties = (properties: PropertyType[]) => {
+  if (!isBrowser()) return
+  localStorage.setItem('properties', JSON.stringify(properties))
+}
+
+export const addProperty = (
+  newProperty: Omit<
+    PropertyType,
+    'id' | 'agentId' | 'createdAt' | 'updatedAt' | 'views' | 'inquiries'
+  >
+): PropertyType => {
+  const properties = getProperties()
+  const property: PropertyType = {
+    ...newProperty,
+    id: new Date().toISOString(),
+    agentId: 'mock-agent-id',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    views: 0,
+    inquiries: 0,
+  }
+  const updatedProperties = [...properties, property]
+  saveProperties(updatedProperties)
+  return property
+}
+
+export const propertyService = {
+  getProperties,
+  addProperty,
 }

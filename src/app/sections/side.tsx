@@ -1,53 +1,63 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Play, Heart, MapPin, BathIcon, BedIcon, RulerIcon, X, Star, Phone, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { BathIcon, BedIcon, ChevronLeft, ChevronRight, Heart, Mail, MapPin, Phone, Play, RulerIcon, Star } from "lucide-react";
+import { X } from "lucide-react";
 import Image from "next/image";
 import one from "@/../public/house8.jpg"; 
 import two from "@/../public/house1.jpg";
 import three from "@/../public/house3.jpg";
 
+
 const propertyData = [
   {
     image: one.src,
+    video: "/one.mp4",
     title: "Luxurious Town House",
     location: "East Legon, Accra",
-    price: "GH₵2M",
-    beds: 3,
-    baths: 2,
-    area: "2.1K",
-    offer: "15% discount on closing costs + free home inspection",
-    tag: "Featured",
-    isHot: false,
+    price: "2,500",
+    period: "month",
+    isHot: true,
+    beds: 4,
+    baths: 5,
+    area: 3500,
+    offer: "For Rent",
+    tag: "New",
+    monthly: true,
   },
   {
     image: two.src,
+    video: "/two.mp4",
     title: "Luxury Villa Retreat",
     location: "Airport Hills, Accra",
-    price: "GH₵1.2M",
-    monthly: "GH₵7,200",
-    beds: 5,
-    baths: 4,
-    area: "4.5K",
-    offer: "Free smart home upgrade + pool maintenance for 1 year",
-    tag: "Hot Deal",
-    isHot: true,
+    price: "4,500",
+    period: "month",
+    isHot: false,
+    beds: 6,
+    baths: 7,
+    area: 6000,
+    offer: "For Rent",
+    tag: "Featured",
+    monthly: true,
   },
   {
     image: three.src,
+    video: "/three.mp4",
     title: "Urban Family Home",
     location: "Osu, Accra",
-    price: "GH₵650K",
-    monthly: "GH₵3,900",
-    beds: 4,
-    baths: 3,
-    area: "3.2K",
-    offer: "No agency fee + free moving service",
-    tag: "New Listing",
+    price: "1,500",
+    period: "month",
     isHot: false,
+    beds: 3,
+    baths: 3,
+    area: 2200,
+    offer: "For Rent",
+    tag: "Popular",
+    monthly: true,
   },
 ];
 
-export default function PropertyListing() {
+export const Side: React.FC = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showTour, setShowTour] = useState(false);
@@ -285,11 +295,7 @@ export default function PropertyListing() {
             </div>
             <div className="p-4">
               <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <Play size={48} className="mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">Virtual tour would load here</p>
-                  <p className="text-xs text-gray-400 mt-1">Interactive 360° experience</p>
-                </div>
+                <video src={property.video} controls className="w-full h-full rounded-lg" />
               </div>
             </div>
           </div>

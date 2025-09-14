@@ -175,7 +175,7 @@ export default function RealtyAdminDashboard() {
                 statCards={statCards}
                 properties={properties}
                 setShowPropertyModal={setShowPropertyModal}
-                setActiveTab={setActiveTab} // <-- Add this line
+                setActiveTab={setActiveTab}
               />
 
           )}

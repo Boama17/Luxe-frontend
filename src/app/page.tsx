@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import Nav from "./sections/nav";
-import Side from "./sections/side";
+import {Side} from "./sections/side";
 import Hero from "./sections/hero";
 import About from "./sections/about";
 import Property from "./sections/properties";

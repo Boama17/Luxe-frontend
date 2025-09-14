@@ -42,7 +42,7 @@ export default function LoginPage() {
 
           if (result.success && result.user) {
             console.log("User signed in via redirect:", result.user);
-            router.push("/admin");
+            router.push("/agent/dashboard");
             return;
           }
 
@@ -51,7 +51,7 @@ export default function LoginPage() {
             const currentUser = authService.getCurrentUser();
             if (currentUser) {
               console.log("Recovered user after redirect:", currentUser);
-              router.push("/admin");
+              router.push("/agent/dashboard");
             } else {
               setIsCheckingRedirect(false);
             }
@@ -89,7 +89,7 @@ export default function LoginPage() {
       
       if (result.success) {
         console.log("User signed in:", result.user);
-        router.push("/admin");
+        router.push("/agent/dashboard");
       } else {
         setError(result.error || "An error occurred during sign in.");
       }
@@ -116,7 +116,7 @@ export default function LoginPage() {
         
         // For desktop popup success
         console.log("User signed in with Google:", result.user);
-        router.push("/admin");
+        router.push("/agent/dashboard");
       } else {
         setError(result.error || "An error occurred during Google sign in.");
         setIsLoading(false);
