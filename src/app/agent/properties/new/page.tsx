@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -253,10 +254,12 @@ const AddPropertyPage = () => {
               <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                 {property.images?.map((img, index) => (
                   <div key={index} className="relative">
-                    <img
+                    <Image
                       src={img}
                       alt={`preview ${index}`}
                       className="h-24 w-full object-cover rounded-md"
+                      width={100}
+                      height={100}
                     />
                   </div>
                 ))}

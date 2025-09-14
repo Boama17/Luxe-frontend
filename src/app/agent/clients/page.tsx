@@ -4,9 +4,10 @@ import React from 'react'
 import { Plus, Search, Users } from 'lucide-react'
 import Link from 'next/link'
 import EmptyState from '@/components/agent/EmptyState'
+import { Client } from '@/types/agent'
 
 export default function ClientsPage() {
-  const clients: any[] = [];
+  const clients: Client[] = []
 
   return (
     <main className="min-h-screen bg-gray-50/50 p-4 sm:p-6 lg:p-8">

@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { useState } from 'react'
 import { Plus, Search, Building } from 'lucide-react'
 import Link from 'next/link'
-import { BedDouble, Bath, Square, Tag, Eye, MessageSquare } from 'lucide-react'
+import Image from 'next/image'
+import { BedDouble, Bath, Square, Eye, MessageSquare } from 'lucide-react'
 import { propertyService } from '@/app/services/propertyService'
 import { Property as PropertyType } from '@/types/agent'
 import EmptyState from '@/components/agent/EmptyState'
@@ -79,11 +79,12 @@ const PropertiesPage = () => {
               {filteredProperties.map((property) => (
                 <li key={property.id} className="p-4 sm:p-6">
                   <div className="flex flex-col sm:flex-row gap-6">
-                    <div className="w-full sm:w-48 h-40 flex-shrink-0">
-                      <img
+                    <div className="w-full sm:w-48 h-40 flex-shrink-0 relative">
+                      <Image
                         src={property.images?.[0] || '/placeholder.svg'}
                         alt={property.title}
                         className="w-full h-full object-cover rounded-lg"
+                        layout="fill"
                       />
                     </div>
                     <div className="flex-1">

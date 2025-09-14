@@ -15,6 +15,7 @@ import {
 import EmptyState from './EmptyState'
 import { propertyService } from '@/app/services/propertyService'
 import { Property as PropertyType } from '@/types/agent'
+import Image from 'next/image'
 
 const initialStats = [
   {
@@ -104,11 +105,14 @@ export default function DashboardContent() {
               {recentProperties.map((property) => (
                 <li key={property.id} className="p-4">
                   <div className="flex items-center gap-4">
-                    <img
-                      src={property.images?.[0] || '/placeholder.svg'}
-                      alt={property.title}
-                      className="w-24 h-20 object-cover rounded-md flex-shrink-0"
-                    />
+                    <div className="w-24 h-20 relative flex-shrink-0">
+                      <Image
+                        src={property.images?.[0] || '/placeholder.svg'}
+                        alt={property.title}
+                        className="object-cover rounded-md"
+                        layout="fill"
+                      />
+                    </div>
                     <div className="flex-1">
                       <Link
                         href={`/agent/properties/${property.id}`}

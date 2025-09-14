@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { BathIcon, BedIcon, ChevronLeft, ChevronRight, Heart, Mail, MapPin, Phone, Play, RulerIcon, Star } from "lucide-react";
 import { X } from "lucide-react";
 import Image from "next/image";
