@@ -1,4 +1,4 @@
-import { Link } from 'lucide-react';
+import Link  from 'next/link';
 import React from 'react'
 
 interface FooterProps {
@@ -46,7 +46,7 @@ function Footer({ background = 'bg-white' }: FooterProps) {
             <div className="mt-4 md:mt-0 flex space-x-6">
               <Link href="/privacy-policy" className="text-sm text-gray-500 hover:text-emerald-800">Privacy Policy</Link>
               <Link href="/terms-of-service" className="text-sm text-gray-500 hover:text-emerald-800">Terms of Service</Link>
-              <Link href="#" className="text-sm text-gray-500 hover:text-emerald-800">Contact Us</Link>
+              <Link href="/contact" className="text-sm text-gray-500 hover:text-emerald-800">Contact Us</Link>
             </div>
           </div>
         </div>
