@@ -393,7 +393,7 @@ export default function PropertyDetailPage() {
                 Call or WhatsApp now for a swift response
               </p>
               <div className="text-2xl font-bold text-green-700 mb-1">
-                05917*****/05534*****
+                0541537940
               </div>
               <div className="text-sm text-gray-600">
                 Agent: <span className="font-semibold">{property.agent}</span>
@@ -403,11 +403,11 @@ export default function PropertyDetailPage() {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Button className="bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-xl text-lg font-semibold flex items-center gap-2">
+              <Button onClick={() => window.location.href = 'tel:0541537940'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-xl text-lg font-semibold flex items-center gap-2">
                 <Phone size={20} />
                 Call Agent
               </Button>
-              <Button variant="outline" className="border-green-700 text-green-700 hover:bg-green-50 px-8 py-3 rounded-xl text-lg font-semibold flex items-center gap-2">
+              <Button onClick={() => window.location.href = 'https://wa.me/233541537940'} variant="outline" className="border-green-700 text-green-700 hover:bg-green-50 px-8 py-3 rounded-xl text-lg font-semibold flex items-center gap-2">
                 <MessageCircle size={20} />
                 WhatsApp
               </Button>
