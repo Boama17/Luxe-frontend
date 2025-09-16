@@ -13,6 +13,7 @@ import Footer from "@/app/sections/footer"
 import { authService } from "@/app/services/authService"
 import { useRouter } from "next/navigation"
 
+
 type FormData = {
   firstName: string
   lastName: string
@@ -22,8 +23,6 @@ type FormData = {
   confirmPassword: string
   interests: string[]
   terms: boolean
-  passportFront: File | null
-  passportBack: File | null
 }
 
 type FormErrors = {
@@ -40,8 +39,6 @@ export default function SignupPage() {
     confirmPassword: "",
     interests: [],
     terms: false,
-    passportFront: null,
-    passportBack: null,
   })
 
   const [errors, setErrors] = useState<FormErrors>({})
@@ -55,8 +52,6 @@ export default function SignupPage() {
   const [showSuccess, setShowSuccess] = useState(false)
   const router = useRouter()
 
-  const [passportFrontPreview, setPassportFrontPreview] = useState<string | null>(null)
-  const [passportBackPreview, setPassportBackPreview] = useState<string | null>(null)
 
   const propertyTypes = [
     {
@@ -135,53 +130,6 @@ export default function SignupPage() {
     }
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: "passportFront" | "passportBack") => {
-    const file = e.target.files?.[0]
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith("image/")) {
-        setErrors((prev) => ({
-          ...prev,
-          [fieldName]: "Please select a valid image file",
-        }))
-        return
-      }
-
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setErrors((prev) => ({
-          ...prev,
-          [fieldName]: "File size must be less than 5MB",
-        }))
-        return
-      }
-
-      setFormData((prev) => ({
-        ...prev,
-        [fieldName]: file,
-      }))
-
-      // Create preview
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        if (fieldName === "passportFront") {
-          setPassportFrontPreview(e.target?.result as string)
-        } else {
-          setPassportBackPreview(e.target?.result as string)
-        }
-      }
-      reader.readAsDataURL(file)
-
-      // Clear error
-      if (errors[fieldName]) {
-        setErrors((prev) => {
-          const updated = { ...prev }
-          delete updated[fieldName]
-          return updated
-        })
-      }
-    }
-  }
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target
@@ -312,14 +260,6 @@ export default function SignupPage() {
         newErrors.confirmPassword = "Passwords do not match"
       }
 
-      if (!formData.passportFront) {
-        newErrors.passportFront = "Please upload the front of your passport/national ID"
-      }
-
-      if (!formData.passportBack) {
-        newErrors.passportBack = "Please upload the back of your passport/national ID"
-      }
-
       if (formData.interests.length === 0) {
         newErrors.interests = "Please select at least one interest"
       }
@@ -362,17 +302,11 @@ export default function SignupPage() {
       )
 
       if (result.success && result.user) {
-        // Send email verification
-        await authService.sendEmailVerification(result.user)
-
-        // Sign out the user so they can't access the app until verified
-        await authService.signOut()
-
         setShowSuccess(true)
 
-        // Redirect to sign in after a short delay
+        // Redirect to agent dashboard after a short delay
         setTimeout(() => {
-          router.push("/verify-email")
+          router.push("/agent/dashboard")
         }, 1500)
       } else {
         setSubmitError(result.error || "Registration failed. Please try again.")
@@ -391,6 +325,8 @@ export default function SignupPage() {
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible)
   }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-amber-50 flex flex-col font-[Poppins-regular]">
@@ -728,181 +664,7 @@ export default function SignupPage() {
                     {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="text-center">
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Identity Verification</h3>
-                      <p className="text-sm text-gray-600">
-                        Please upload clear photos of your passport or national ID for verification
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Front of Passport/ID */}
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Front of Passport/National ID</label>
-                        <div
-                          className={`border-2 border-dashed rounded-lg p-4 text-center ${errors.passportFront ? "border-red-300 bg-red-50" : "border-gray-300 bg-gray-50"} hover:border-emerald-400 transition-colors`}
-                        >
-                          {passportFrontPreview ? (
-                            <div className="relative">
-                              <Image
-                                src={passportFrontPreview || "/placeholder.svg"}
-                                alt="Passport front preview"
-                                width={400} // set an explicit width
-                                height={128} // set an explicit height (h-32 ≈ 128px)
-                                className="w-full h-32 object-cover rounded-lg"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setFormData((prev) => ({ ...prev, passportFront: null }))
-                                  setPassportFrontPreview(null)
-                                }}
-                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          ) : (
-                            <div>
-                              <svg
-                                className="mx-auto h-12 w-12 text-gray-400"
-                                stroke="currentColor"
-                                fill="none"
-                                viewBox="0 0 48 48"
-                              >
-                                <path
-                                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              <div className="mt-2">
-                                <label htmlFor="passportFront" className="cursor-pointer">
-                                  <span className="text-emerald-600 hover:text-emerald-500 font-medium">
-                                    Upload front
-                                  </span>
-                                  <input
-                                    id="passportFront"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => handleFileChange(e, "passportFront")}
-                                    className="sr-only"
-                                  />
-                                </label>
-                                <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        {errors.passportFront && <p className="text-red-500 text-xs">{errors.passportFront}</p>}
-                      </div>
-
-                      {/* Back of Passport/ID */}
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Back of Passport/National ID</label>
-                        <div
-                          className={`border-2 border-dashed rounded-lg p-4 text-center ${errors.passportBack ? "border-red-300 bg-red-50" : "border-gray-300 bg-gray-50"} hover:border-emerald-400 transition-colors`}
-                        >
-                          {passportBackPreview ? (
-                            <div className="relative">
-                             <div className="relative w-full h-32">
-                              <Image
-                                src={passportBackPreview || "/placeholder.svg"}
-                                alt="Passport back preview"
-                                fill
-                                className="object-cover rounded-lg"
-                              />
-                            </div>
-
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setFormData((prev) => ({ ...prev, passportBack: null }))
-                                  setPassportBackPreview(null)
-                                }}
-                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          ) : (
-                            <div>
-                              <svg
-                                className="mx-auto h-12 w-12 text-gray-400"
-                                stroke="currentColor"
-                                fill="none"
-                                viewBox="0 0 48 48"
-                              >
-                                <path
-                                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              <div className="mt-2">
-                                <label htmlFor="passportBack" className="cursor-pointer">
-                                  <span className="text-emerald-600 hover:text-emerald-500 font-medium">
-                                    Upload back
-                                  </span>
-                                  <input
-                                    id="passportBack"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => handleFileChange(e, "passportBack")}
-                                    className="sr-only"
-                                  />
-                                </label>
-                                <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        {errors.passportBack && <p className="text-red-500 text-xs">{errors.passportBack}</p>}
-                      </div>
-                    </div>
-
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                      <div className="flex">
-                        <svg
-                          className="h-5 w-5 text-blue-400 mt-0.5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                        <div className="ml-3">
-                          <p className="text-sm text-blue-700">
-                            <strong>Tips for clear photos:</strong> Ensure good lighting, avoid glare, and make sure all
-                            text is readable. Your information will be kept secure and used only for verification
-                            purposes.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                 
 
                   <fieldset className="space-y-3">
                     <legend className="text-sm font-medium text-gray-700">
@@ -954,6 +716,8 @@ export default function SignupPage() {
                     {errors.interests && <p className="text-red-500 text-xs mt-1">{errors.interests}</p>}
                   </fieldset>
 
+
+
                   <div className="flex items-start">
                     <div className="flex items-center h-5">
                       <input
@@ -986,8 +750,7 @@ export default function SignupPage() {
                   {showSuccess && (
                     <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                       <p className="text-green-600 text-sm">
-                        Registration successful! Please check your email to verify your account. Redirecting to sign
-                        in...
+                        Registration successful! Redirecting to your dashboard...
                       </p>
                     </div>
                   )}

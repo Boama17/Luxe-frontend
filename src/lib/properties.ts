@@ -1,4 +1,4 @@
-// lib/properties.ts - Enhanced with categorization
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import one from "@/../public/house1.jpg";
 import two from "@/../public/house2.jpg";
 import three from "@/../public/house3.jpg";
@@ -7,11 +7,11 @@ import five from "@/../public/house5.jpg";
 import six from "@/../public/house6.jpg";
 import seven from "@/../public/house7.jpg";
 import eight from "@/../public/house8.jpg";
-import nine from "@/../public/house9.jpeg"
-import ten from "@/../public/house10.jpeg"
-import eleven from "@/../public/house11.jpeg"
-import twelve from "@/../public/house12.jpeg"
-import thirteen from "@/../public/house13.jpeg"
+import nine from "@/../public/house9.jpeg";
+import ten from "@/../public/house10.jpeg";
+import eleven from "@/../public/house11.jpeg";
+import twelve from "@/../public/house12.jpeg";
+import thirteen from "@/../public/house13.jpeg";
 
 // Import interior images for each property
 import one1 from "@/../public/one/01.jpg";
@@ -68,57 +68,57 @@ import nine5 from "@/../public/nine/05.jpeg";
 import nine6 from "@/../public/nine/06.jpeg";
 import nine7 from "@/../public/nine/07.jpeg";
 
-import ten1 from "@/../public/ten/01.jpeg"
-import ten2 from "@/../public/ten/02.jpeg"
-import ten3 from "@/../public/ten/03.jpeg"
-import ten4 from "@/../public/ten/04.jpeg"
-import ten5 from "@/../public/ten/05.jpeg"
-import ten6 from "@/../public/ten/06.jpeg"
-import ten7 from "@/../public/ten/07.jpeg"
-import ten8 from "@/../public/ten/08.jpeg"
-import ten9 from "@/../public/ten/09.jpeg"
-import ten10 from "@/../public/ten/10.jpeg"
-import ten11 from "@/../public/ten/11.jpeg"
+import ten1 from "@/../public/ten/01.jpeg";
+import ten2 from "@/../public/ten/02.jpeg";
+import ten3 from "@/../public/ten/03.jpeg";
+import ten4 from "@/../public/ten/04.jpeg";
+import ten5 from "@/../public/ten/05.jpeg";
+import ten6 from "@/../public/ten/06.jpeg";
+import ten7 from "@/../public/ten/07.jpeg";
+import ten8 from "@/../public/ten/08.jpeg";
+import ten9 from "@/../public/ten/09.jpeg";
+import ten10 from "@/../public/ten/10.jpeg";
+import ten11 from "@/../public/ten/11.jpeg";
 
-import eleven1 from "@/../public/eleven/01.jpeg"
-import eleven2 from "@/../public/eleven/02.jpeg"
-import eleven3 from "@/../public/eleven/03.jpeg"
-import eleven4 from "@/../public/eleven/04.jpeg"
-import eleven5 from "@/../public/eleven/05.jpeg"
-import eleven6 from "@/../public/eleven/06.jpeg"
-import eleven7 from "@/../public/eleven/07.jpeg"
-import eleven8 from "@/../public/eleven/08.jpeg"
-import eleven9 from "@/../public/eleven/09.jpeg"
-import eleven10 from "@/../public/eleven/10.jpeg"
-import eleven11 from "@/../public/eleven/11.jpeg"
+import eleven1 from "@/../public/eleven/01.jpeg";
+import eleven2 from "@/../public/eleven/02.jpeg";
+import eleven3 from "@/../public/eleven/03.jpeg";
+import eleven4 from "@/../public/eleven/04.jpeg";
+import eleven5 from "@/../public/eleven/05.jpeg";
+import eleven6 from "@/../public/eleven/06.jpeg";
+import eleven7 from "@/../public/eleven/07.jpeg";
+import eleven8 from "@/../public/eleven/08.jpeg";
+import eleven9 from "@/../public/eleven/09.jpeg";
+import eleven10 from "@/../public/eleven/10.jpeg";
+import eleven11 from "@/../public/eleven/11.jpeg";
 
-import twelve1 from "@/../public/twelve/01.jpeg"
-import twelve2 from "@/../public/twelve/02.jpeg"
-import twelve3 from "@/../public/twelve/03.jpeg"
-import twelve4 from "@/../public/twelve/04.jpeg"
-import twelve5 from "@/../public/twelve/05.jpeg"
-import twelve6 from "@/../public/twelve/06.jpeg"
-import twelve7 from "@/../public/twelve/07.jpeg"
-import twelve8 from "@/../public/twelve/08.jpeg"
-import twelve9 from "@/../public/twelve/09.jpeg"
-import twelve10 from "@/../public/twelve/10.jpeg"
-import twelve11 from "@/../public/twelve/11.jpeg"
-import twelve12 from "@/../public/twelve/12.jpeg"
-import twelve13 from "@/../public/twelve/13.jpeg"
-import twelve14 from "@/../public/twelve/14.jpeg"
+import twelve1 from "@/../public/twelve/01.jpeg";
+import twelve2 from "@/../public/twelve/02.jpeg";
+import twelve3 from "@/../public/twelve/03.jpeg";
+import twelve4 from "@/../public/twelve/04.jpeg";
+import twelve5 from "@/../public/twelve/05.jpeg";
+import twelve6 from "@/../public/twelve/06.jpeg";
+import twelve7 from "@/../public/twelve/07.jpeg";
+import twelve8 from "@/../public/twelve/08.jpeg";
+import twelve9 from "@/../public/twelve/09.jpeg";
+import twelve10 from "@/../public/twelve/10.jpeg";
+import twelve11 from "@/../public/twelve/11.jpeg";
+import twelve12 from "@/../public/twelve/12.jpeg";
+import twelve13 from "@/../public/twelve/13.jpeg";
+import twelve14 from "@/../public/twelve/14.jpeg";
 
-import thirteen1 from "@/../public/thirteen/1.jpeg"
-import thirteen2 from "@/../public/thirteen/2.jpeg"
-import thirteen3 from "@/../public/thirteen/3.jpeg"
-import thirteen4 from "@/../public/thirteen/4.jpeg"
-import thirteen5 from "@/../public/thirteen/5.jpeg"
-import thirteen6 from "@/../public/thirteen/6.jpeg"
-import thirteen7 from "@/../public/thirteen/7.jpeg"
-import thirteen8 from "@/../public/thirteen/8.jpeg"
-import thirteen9 from "@/../public/thirteen/9.jpeg"
-import thirteen10 from "@/../public/thirteen/10.jpeg"
-import thirteen11 from "@/../public/thirteen/11.jpeg"
-import thirteen12 from "@/../public/thirteen/12.jpeg"
+import thirteen1 from "@/../public/thirteen/1.jpeg";
+import thirteen2 from "@/../public/thirteen/2.jpeg";
+import thirteen3 from "@/../public/thirteen/3.jpeg";
+import thirteen4 from "@/../public/thirteen/4.jpeg";
+import thirteen5 from "@/../public/thirteen/5.jpeg";
+import thirteen6 from "@/../public/thirteen/6.jpeg";
+import thirteen7 from "@/../public/thirteen/7.jpeg";
+import thirteen8 from "@/../public/thirteen/8.jpeg";
+import thirteen9 from "@/../public/thirteen/9.jpeg";
+import thirteen10 from "@/../public/thirteen/10.jpeg";
+import thirteen11 from "@/../public/thirteen/11.jpeg";
+import thirteen12 from "@/../public/thirteen/12.jpeg";
 
 
 
@@ -265,6 +265,7 @@ const Properties: Property[] = [
     inquiries: 10,
     listingType: "rent",
     category: PropertyCategory.RESIDENTIAL
+    
   },
   {
     id: 2,
@@ -443,7 +444,7 @@ const Properties: Property[] = [
   },
   {
     id: 9,
-    title: "2 Bedrrom Semi Detached Townhouse",
+    title: "2 Bedroom Semi Detached Townhouse",
     price: 50000,
     currency: "USD",
     bedrooms: 2,
@@ -920,7 +921,7 @@ export const PropertyListings: PropertyListing[] = [
   },
   {
     id:9,
-    title: "2 Bedrrom Semi Detached Townhouse - University of Professional Studies",
+    title: "2 Bedroom Semi Detached Townhouse - University of Professional Studies",
     shortDescription: "Semi detached townhouse with beautiful interior and premium features",
     features: [
       "2 bedroom townhouse",

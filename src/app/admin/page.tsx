@@ -4,6 +4,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { fetchProperties } from "@/lib/properties"; // <-- Import fetchProperties
+import { Building, Home, Users, DollarSign } from "lucide-react";
 import Sidebar from "./components/sidebar"
 import Header from './components/header';
 import StatCard from "./components/StatCard";
@@ -22,35 +23,9 @@ export default function RealtyAdminDashboard() {
   // States
   const [activeTab, setActiveTab] = useState('dashboard');
   const [properties, setProperties] = useState<any[]>([]);
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "Caleb Asiedu",
-      email: "caleb005@gmail.com",
-      role: "buyer",
-      status: "active",
-      joinDate: "2024-01-15",
-      properties: 3
-    },
-    {
-      id: 2,
-      name: "Boama David",
-      email: "boamadavid7@gmail.com",
-      role: "agent",
-      status: "active",
-      joinDate: "2024-01-10",
-      properties: 12
-    },
-    {
-      id: 3,
-      name: "Mike Wilson",
-      email: "mike23@yahoo.com",
-      role: "buyer",
-      status: "inactive",
-      joinDate: "2024-01-20",
-      properties: 0
-    }
-  ]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [showPropertyModal, setShowPropertyModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -79,9 +54,35 @@ export default function RealtyAdminDashboard() {
     properties: 0,
   });
 
-  // Fetch properties from /lib/properties.ts
+  // Fetch data from APIs
   useEffect(() => {
-    fetchProperties().then((data) => setProperties(data));
+    const fetchData = async () => {
+      try {
+        // Fetch properties
+        const propertiesData = await fetchProperties();
+        setProperties(propertiesData);
+
+        // Fetch users
+        const usersResponse = await fetch('/api/admin/users');
+        const usersData = await usersResponse.json();
+        if (usersData.success) {
+          setUsers(usersData.users);
+        }
+
+        // Fetch statistics
+        const statsResponse = await fetch('/api/admin/stats');
+        const statsData = await statsResponse.json();
+        if (statsData.success) {
+          setStats(statsData.stats);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   // Filtered and searched properties
@@ -158,6 +159,53 @@ export default function RealtyAdminDashboard() {
 
  
 
+  // Create dynamic stat cards based on real data
+  const dynamicStatCards = stats ? [
+    {
+      title: 'Total Properties',
+      value: stats.totalProperties,
+      change: '+12%',
+      icon: Building,
+      color: 'text-blue-600',
+      bg: 'bg-blue-50'
+    },
+    {
+      title: 'Active Listings',
+      value: stats.activeListings,
+      change: '+8%',
+      icon: Home,
+      color: 'text-green-600',
+      bg: 'bg-green-50'
+    },
+    {
+      title: 'Total Users',
+      value: stats.totalUsers,
+      change: '+24%',
+      icon: Users,
+      color: 'text-purple-600',
+      bg: 'bg-purple-50'
+    },
+    {
+      title: 'Monthly Revenue',
+      value: `₵${(stats.monthlyRevenue / 1000000).toFixed(1)}M`,
+      change: '+15%',
+      icon: DollarSign,
+      color: 'text-orange-600',
+      bg: 'bg-orange-50'
+    }
+  ] : statCards;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-yellow-50 to-green-100 font-[Poppins-regular] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading Admin Dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-yellow-50 to-green-100 font-[Poppins-regular] flex">
       {/* Sidebar */}
@@ -170,9 +218,9 @@ export default function RealtyAdminDashboard() {
         {/* Page Content */}
         <main className="flex-1 p-8 bg-transparent">
           {activeTab === 'dashboard' && (
-            
+
               <DashboardTab
-                statCards={statCards}
+                statCards={dynamicStatCards}
                 properties={properties}
                 setShowPropertyModal={setShowPropertyModal}
                 setActiveTab={setActiveTab}

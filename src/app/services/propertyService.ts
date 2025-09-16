@@ -1,4 +1,9 @@
-import { Property as LibProperty, fetchProperties } from "@/lib/properties";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { 
+  Property as LibProperty, 
+  fetchProperties, 
+  PropertyCategory 
+} from "@/lib/properties";
 import { Property as PropertyType } from '@/types/agent'
 
 export type Property = LibProperty;
@@ -21,11 +26,79 @@ export interface PropertySearchResult {
   totalPages: number;
 }
 
+const hashCode = (s: string) => {
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    const char = s.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return Math.abs(hash);
+};
+
 export async function searchProperties(params: PropertySearchParams): Promise<PropertySearchResult> {
-  const allProperties = await fetchProperties();
+  const staticProperties = await fetchProperties();
+  const agentProperties = getProperties();
+
+  const mappedAgentProperties: Property[] = agentProperties.map((p: PropertyType) => ({
+    id: hashCode(p.id),
+    agent: 'Agent',
+    category: ((p as any).type || 'residential').toLowerCase() as PropertyCategory,
+    propertyType: (p as any).type || 'residential',
+    title: p.title,
+    price: p.price,
+    period: 'month',
+    location: p.location,
+    address: p.location,
+    city: 'Unknown',
+    region: 'Unknown',
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    area: p.squareFeet,
+    imageUrl: p.images?.[0] || '/placeholder.jpg',
+    garage: ((p as any).amenities?.includes('garage') || false),
+    pool: ((p as any).amenities?.includes('pool') || false),
+    features: {
+      bedrooms: p.bedrooms,
+      bathrooms: p.bathrooms,
+      area: p.squareFeet,
+      laundry: ((p as any).amenities?.includes('laundry') || false),
+      gym: ((p as any).amenities?.includes('gym') || false),
+    },
+    images: p.images,
+    interiorImages: p.images || [],
+    listingType: 'rent',
+    coverImage: p.images?.[0] || '/placeholder.jpg',
+    description: p.description,
+    rating: 5,
+    reviews: 0,
+    featured: false,
+    isNew: 'true',
+    tags: [],
+    yearBuilt: new Date().getFullYear(),
+    lotSize: p.squareFeet,
+    views: 0,
+    inquiries: 0,
+    status: 'available',
+    availabilityDate: new Date(),
+    currency: 'USD',
+    amenities: (p as any).amenities || [],
+    nearbySchools: [],
+    nearbyHospitals: [],
+    nearbyRestaurants: [],
+    transportation: 'Public transport nearby',
+    floorPlan: {
+      image: '',
+      description: 'No floor plan available',
+    },
+    virtualTour: '',
+  }));
+
+  const allProperties = [...staticProperties, ...mappedAgentProperties];
+  const uniqueProperties = Array.from(new Map(allProperties.map(p => [p.id, p])).values());
 
   // Filtering
-  let filtered = allProperties.filter((p) => {
+  let filtered = uniqueProperties.filter((p) => {
     const matchesSearch =
       !params.search ||
       p.title.toLowerCase().includes(params.search.toLowerCase()) ||
@@ -82,13 +155,70 @@ export async function searchProperties(params: PropertySearchParams): Promise<Pr
 }
 
 export async function getPropertyById(id: number): Promise<Property | undefined> {
-  const allProperties = await fetchProperties();
+  const staticProperties = await fetchProperties();
+  const agentProperties = getProperties();
+
+  const mappedAgentProperties: Property[] = agentProperties.map((p: PropertyType) => ({
+    id: hashCode(p.id),
+    agent: 'Agent',
+    category: ((p as any).type || 'residential').toLowerCase() as PropertyCategory,
+    propertyType: (p as any).type || 'residential',
+    title: p.title,
+    price: p.price,
+    period: 'month',
+    location: p.location,
+    address: p.location,
+    city: 'Unknown',
+    region: 'Unknown',
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    area: p.squareFeet,
+    imageUrl: p.images?.[0] || '/placeholder.jpg',
+    garage: ((p as any).amenities?.includes('garage') || false),
+    pool: ((p as any).amenities?.includes('pool') || false),
+    features: {
+      bedrooms: p.bedrooms,
+      bathrooms: p.bathrooms,
+      area: p.squareFeet,
+      laundry: ((p as any).amenities?.includes('laundry') || false),
+      gym: ((p as any).amenities?.includes('gym') || false),
+    },
+    images: p.images,
+    interiorImages: p.images || [],
+    listingType: 'rent',
+    coverImage: p.images?.[0] || '/placeholder.jpg',
+    description: p.description,
+    rating: 5,
+    reviews: 0,
+    featured: false,
+    isNew: 'true',
+    tags: [],
+    yearBuilt: new Date().getFullYear(),
+    lotSize: p.squareFeet,
+    views: 0,
+    inquiries: 0,
+    status: 'available',
+    availabilityDate: new Date(),
+    currency: 'USD',
+    amenities: (p as any).amenities || [],
+    nearbySchools: [],
+    nearbyHospitals: [],
+    nearbyRestaurants: [],
+    transportation: 'Public transport nearby',
+    floorPlan: {
+      image: '',
+      description: 'No floor plan available',
+    },
+    virtualTour: '',
+  }));
+
+  const allProperties = [...staticProperties, ...mappedAgentProperties];
   return allProperties.find((p) => p.id === id);
 }
 
 const isBrowser = () => typeof window !== 'undefined'
 
-const getProperties = (): PropertyType[] => {
+export const getProperties = (): PropertyType[] => {
   if (!isBrowser()) return []
   const propertiesJson = localStorage.getItem('properties')
   return propertiesJson ? JSON.parse(propertiesJson) : []

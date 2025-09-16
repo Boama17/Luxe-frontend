@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -11,10 +13,13 @@ import {
   Plus,
   BedDouble,
   Bath,
+  AlertTriangle,
+  X,
 } from 'lucide-react'
 import EmptyState from './EmptyState'
 import { propertyService } from '@/app/services/propertyService'
 import { Property as PropertyType } from '@/types/agent'
+import { authService } from '@/app/services/authService'
 import Image from 'next/image'
 
 const initialStats = [
@@ -38,6 +43,9 @@ export default function DashboardContent() {
   const router = useRouter()
   const [stats, setStats] = useState(initialStats)
   const [recentProperties, setRecentProperties] = useState<PropertyType[]>([])
+  const [user, setUser] = useState<any>(null)
+  const [identityVerified, setIdentityVerified] = useState(false)
+  const [showVerificationModal, setShowVerificationModal] = useState(false)
 
   useEffect(() => {
     const allProperties = propertyService.getProperties()
@@ -63,8 +71,94 @@ export default function DashboardContent() {
     setRecentProperties(sortedProperties)
   }, [])
 
+  useEffect(() => {
+    const currentUser = authService.getCurrentUser()
+    setUser(currentUser)
+    if (currentUser) {
+      // Check for verification success from URL params (after returning from Didit)
+      const urlParams = new URLSearchParams(window.location.search)
+      if (urlParams.get('verification') === 'success') {
+        setIdentityVerified(true)
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname)
+      } else {
+        // Check identity verification from localStorage or other storage
+        const identityStatus = localStorage.getItem(`identity_verified_${currentUser.uid}`)
+        setIdentityVerified(identityStatus === 'approved')
+      }
+    }
+  }, [])
+
+  const startIdentityVerification = async (): Promise<boolean> => {
+    try {
+      // Get current user directly from auth service to ensure we have the latest user data
+      const currentUser = authService.getCurrentUser()
+      if (!currentUser?.uid) {
+        alert("Unable to get user information. Please refresh the page and try again.")
+        return false
+      }
+
+      const res = await fetch("/api/create-verification-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: currentUser.uid }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok && data.url) {
+        // Redirect to the Didit verification session
+        window.location.href = data.url
+        return true
+      } else {
+        const errorMessage = data.details || data.error || "Failed to get verification URL"
+        console.error("Verification setup failed:", errorMessage)
+        alert(`Verification setup failed: ${errorMessage}`)
+        return false
+      }
+    } catch (error) {
+      console.error("Error starting verification:", error)
+      alert("Network error occurred while starting verification. Please try again.")
+      return false
+    }
+  }
+
+  const handleIdentityVerification = async () => {
+    const success = await startIdentityVerification()
+    if (!success) {
+      alert("Failed to start verification. Please try again.")
+    }
+  }
+
   return (
     <div className="space-y-6">
+      {/* Verification Banner */}
+      {!identityVerified && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2" />
+              <div>
+                <h3 className="text-sm font-medium text-yellow-800">
+                  Complete Your Identity Verification
+                </h3>
+                <p className="text-sm text-yellow-700 mt-1">
+                  Verify your identity to unlock full access to your dashboard.
+                </p>
+              </div>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setShowVerificationModal(true)}
+                className="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm"
+              >
+                Verify Identity
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
@@ -219,6 +313,50 @@ export default function DashboardContent() {
           </div>
         </div>
       </div>
+
+      {/* Verification Modal */}
+      {showVerificationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Identity Verification
+              </h3>
+              <button
+                onClick={() => setShowVerificationModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="mb-6">
+              <p className="text-gray-600 mb-4">
+                Verify your identity using our secure verification partner, Didit.
+              </p>
+              <p className="text-sm text-gray-500">
+                This process ensures compliance and helps maintain a trusted platform for all users.
+              </p>
+            </div>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowVerificationModal(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowVerificationModal(false)
+                  handleIdentityVerification()
+                }}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded"
+              >
+                Start Identity Verification
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

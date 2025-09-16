@@ -1,3 +1,5 @@
 {
-    "CodeGPT.apiKey": "CodeGPT Plus Beta"
+    "CodeGPT.apiKey": "CodeGPT Plus Beta",
+    "Codegeex.GenerationPreference": "automatic",
+    "Codegeex.Chat.LanguagePreference": "English"
 }

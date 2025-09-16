@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Plus, User } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Plus, User, Mail, MailCheck } from "lucide-react";
 import UserModal from "../modals/UserModal";
 
 
@@ -13,14 +13,35 @@ interface UserType {
   status: string;
   joinDate?: string;
   properties: number;
+  emailVerified?: boolean;
+  lastSignIn?: string;
 }
 
 export default function UsersTab({
-  users,
+  users: initialUsers,
 }: {
   users: UserType[];
 }) {
-  const [userList, setUserList] = useState(users);
+  const [userList, setUserList] = useState<UserType[]>(initialUsers);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('/api/admin/users');
+        const data = await response.json();
+        if (data.success) {
+          setUserList(data.users);
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<UserType | null>(null);
 
@@ -61,13 +82,32 @@ export default function UsersTab({
     setEditingUser(null);
   };
 
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-emerald-900">Users</h2>
+            <p className="text-emerald-700">Manage users and agents</p>
+          </div>
+        </div>
+        <div className="bg-white/90 rounded-2xl shadow border border-emerald-100 p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading users...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-emerald-900">Users</h2>
-          <p className="text-emerald-700">Manage users and agents</p>
+          <p className="text-emerald-700">Manage users and agents ({userList.length} total)</p>
         </div>
         <button
           onClick={handleAdd}
@@ -93,7 +133,13 @@ export default function UsersTab({
                 Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-emerald-700 uppercase tracking-wider">
+                Email Verified
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-emerald-700 uppercase tracking-wider">
                 Join Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-emerald-700 uppercase tracking-wider">
+                Last Sign In
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-emerald-700 uppercase tracking-wider">
                 Properties
@@ -135,8 +181,25 @@ export default function UsersTab({
                     {user.status}
                   </span>
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex items-center">
+                    {user.emailVerified ? (
+                      <MailCheck className="w-4 h-4 text-green-600" />
+                    ) : (
+                      <Mail className="w-4 h-4 text-red-600" />
+                    )}
+                    <span className={`ml-2 text-xs font-medium ${
+                      user.emailVerified ? "text-green-800" : "text-red-800"
+                    }`}>
+                      {user.emailVerified ? "Verified" : "Unverified"}
+                    </span>
+                  </div>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {user.joinDate}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {user.lastSignIn}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {user.properties}

@@ -17,7 +17,7 @@ export default function AgentHeader() {
 
   const handleSignOut = async () => {
     await authService.signOut();
-    router.push('/agent/signin');
+    router.push('/signin');
   };
 
   return (

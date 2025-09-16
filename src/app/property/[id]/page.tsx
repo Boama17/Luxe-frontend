@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client"
 
 import { useEffect, useState } from "react"
@@ -18,7 +20,8 @@ import {
   Phone,
   MessageCircle
 } from "lucide-react"
-import { getPropertyById, getPropertyListingById, Property, PropertyListing, formatPrice } from "@/lib/properties"
+import { getPropertyById } from "@/app/services/propertyService";
+import { Property, PropertyListing, formatPrice, getPropertyListingById } from "@/lib/properties"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -38,19 +41,18 @@ export default function PropertyDetailPage() {
       setLoading(true)
       setError(null)
       try {
-        const [prop, listing] = await Promise.all([
-          getPropertyById(Number(id)),
-          getPropertyListingById(Number(id))
-        ])
-        
+        const prop = await getPropertyById(Number(id))
+        const listing = await getPropertyListingById(Number(id))
+
         if (!prop) {
           setError("Property not found")
           setProperty(null)
+          setPropertyListing(null)
         } else {
           setProperty(prop)
+          setPropertyListing(listing)
         }
-        
-        setPropertyListing(listing)
+
       } catch {
         setError("Failed to load property.")
       } finally {
@@ -160,7 +162,7 @@ export default function PropertyDetailPage() {
           )}
           {/* Image indicators */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-            {images.map((_, idx) => (
+            {images.map((_: any, idx: number) => (
               <button
                 key={idx}
                 onClick={() => setCurrentImage(idx)}

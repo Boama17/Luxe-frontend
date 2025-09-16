@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
 import { useRouter } from "next/navigation"
-
+import { getProperties as getAgentProperties } from "@/app/services/propertyService";
 import { useState, useEffect } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Autoplay, Pagination } from "swiper/modules"
-import Image from "next/image"
+import Image, { StaticImageData } from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Loader2,
@@ -118,22 +119,54 @@ export default function CategorizedPropertyListing() {
   // Load properties and calculate category counts
   useEffect(() => {
     const loadProperties = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const fetchedProperties = await fetchProperties();
-        setProperties(fetchedProperties);
-        
-        // Calculate category counts
-        const counts: Record<string, number> = {
-          all: fetchedProperties.length
-        };
-        
-        Object.values(PropertyCategory).forEach(category => {
-          counts[category] = getPropertiesByCategory(category).length;
+        const staticProperties = await fetchProperties();
+        const agentPropertiesData = getAgentProperties();
+
+        const mappedAgentProperties: Property[] = agentPropertiesData.map((p: any, index: number) => {
+            const baseId = staticProperties.length > 0 ? Math.max(...staticProperties.map(sp => sp.id)) : 0;
+            return {
+                ...p,
+                id: baseId + index + 1,
+                isNew: "true",
+                rating: 5.0,
+                agent: "Agent",
+                views: 0,
+                inquiries: 0,
+                price: Number(p.price) || 0,
+                currency: "GHS",
+                bedrooms: Number(p.bedrooms) || 0,
+                bathrooms: Number(p.bathrooms) || 0,
+                area: Number(p.squareFeet) || 0,
+                city: p.location.split(',').length > 1 ? p.location.split(',')[1].trim() : p.location,
+                region: p.location.split(',').length > 2 ? p.location.split(',')[2].trim() : 'Greater Accra',
+                imageUrl: p.images[0] || "/placeholder.svg",
+                interiorImages: p.images,
+                listingType: p.status === 'For-Sale' ? 'sale' : 'rent',
+                category: (p.type || 'residential').toLowerCase() as PropertyCategory,
+                propertyType: p.type || 'residential',
+                address: p.location,
+            };
         });
+
+        const combinedProperties = [...staticProperties, ...mappedAgentProperties];
         
+        const uniqueProperties = Array.from(new Map(combinedProperties.map(p => [p.id, p])).values());
+
+        setProperties(uniqueProperties);
+
+        const counts = uniqueProperties.reduce((acc, property) => {
+          acc[property.category] = (acc[property.category] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        
+        counts['all'] = uniqueProperties.length;
         setCategoryCounts(counts);
+
       } catch (err) {
-        setError("Failed to load properties. Please try again later.")
+        setError("Failed to load properties. Please try again later.");
         console.error("Fetch error:", err)
       } finally {
         setLoading(false)
@@ -324,7 +357,7 @@ export default function CategorizedPropertyListing() {
 
   // Category content component
   const CategoryContent = ({ category }: { category: string }) => {
-    const filteredProperties = category === 'all' ? properties : getPropertiesByCategory(category as PropertyCategory);
+    const filteredProperties = category === 'all' ? properties : properties.filter(p => p.category === category);
     const showAllForCategory = showAll[category] || false;
     const displayProperties = showAllForCategory ? filteredProperties : filteredProperties.slice(0, 6);
 

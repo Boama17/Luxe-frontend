@@ -1,7 +1,7 @@
 import AgentSidebar from '@/components/agent/AgentSidebar'
 import AgentHeader from '@/components/agent/AgentHeader'
 
-export default function AgentLayout({
+export default function AgentDashboardLayout({
   children,
 }: {
   children: React.ReactNode
